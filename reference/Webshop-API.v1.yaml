@@ -1,0 +1,486 @@
+openapi: 3.0.0
+info:
+  title: Webshop API
+  version: '1.0'
+  description: Webshop API
+  contact:
+    name: Balint Jeszenszky
+servers:
+  - url: 'http://localhost:3000/api'
+paths:
+  /auth/register:
+    post:
+      summary: Send registration data
+      tags:
+        - auth
+      responses:
+        '201':
+          description: Created
+          headers: {}
+        '409':
+          description: Conflict
+      operationId: post-auth-register
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - email
+                - password
+      description: User registration
+  /auth/login:
+    post:
+      summary: Send user credentials
+      tags:
+        - auth
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+      operationId: post-auth-login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+        description: ''
+      description: User login
+  '/product/{productID}':
+    parameters:
+      - schema:
+          type: string
+        name: productID
+        in: path
+        required: true
+    get:
+      summary: Get details of product
+      tags:
+        - product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+      operationId: get-product-productID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      description: Get information of a product
+    post:
+      summary: Create new product
+      tags: []
+      responses:
+        '201':
+          description: Created
+      operationId: post-product-productID
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      description: Create a new product by the admin
+    put:
+      summary: Update product details
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: put-product-productID
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Product'
+        description: ''
+      description: Update product information by the admin
+    delete:
+      summary: Delete product
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: delete-product-productID
+      security:
+        - JWT: []
+      description: Delete a product by the admin
+  '/profile/{userID}':
+    parameters:
+      - schema:
+          type: string
+        name: userID
+        in: path
+        required: true
+    get:
+      summary: Get user info
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      operationId: get-user-userID
+      security:
+        - JWT: []
+      description: Get the current user's data
+    put:
+      summary: Update user info
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: put-user-userID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+        - JWT: []
+      description: Update current user's data
+    delete:
+      summary: Delete user
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: delete-user-userID
+      security:
+        - JWT: []
+      description: Delete user account
+  '/basket/{userID}':
+    parameters:
+      - schema:
+          type: string
+        name: userID
+        in: path
+        required: true
+    get:
+      summary: Get basket items list
+      tags:
+        - basket
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      operationId: get-basket-userID
+      security:
+        - JWT: []
+      description: Get the basket content in a list
+    put:
+      summary: Update basket items list
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: put-basket-userID
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+      description: Basket modifications
+  '/products/{categoryID}/page/{page}':
+    parameters:
+      - schema:
+          type: string
+        name: categoryID
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: page
+        in: path
+        required: true
+    get:
+      summary: Get products list from category
+      tags:
+        - product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      operationId: get-products-categoryID-page-page
+      description: 'Get a list of product from a category '
+  /products:
+    get:
+      summary: Get recommended ptoducts list
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      operationId: get-products
+      description: Get the recommended products list
+  /subscribe:
+    post:
+      summary: Subscribe for notifications
+      tags:
+        - notifications
+      responses:
+        '204':
+          description: No Content
+      operationId: post-subscribe
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: string
+      description: User subscription for push notifications
+  '/delivery/{companyID}':
+    put:
+      summary: Delivery informationupdate
+      tags:
+        - delivery
+      responses:
+        '204':
+          description: No Content
+      operationId: put-delivery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryInfo'
+      description: Delivery info update by delivery company
+    parameters:
+      - schema:
+          type: string
+        name: companyID
+        in: path
+        required: true
+  /products/search:
+    post:
+      summary: 'Send search data, get a product list'
+      tags:
+        - product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      operationId: post-products-search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                categoryID:
+                  type: string
+      description: Search for products in a category or in the whole database
+  '/orders/{orderID}':
+    get:
+      summary: Get order details
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+      operationId: get-orders
+      security:
+        - JWT: []
+      description: Get details of the order
+    put:
+      summary: Change order details
+      tags:
+        - order
+      responses:
+        '204':
+          description: No Content
+      operationId: put-orders
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      description: Edit order details
+    parameters:
+      - schema:
+          type: string
+        name: orderID
+        in: path
+        required: true
+  /currencies:
+    get:
+      summary: Get list of accepted currencies
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+      operationId: get-currencies
+      description: Get a list of accepted currencies
+    put:
+      summary: Edit accepted currencies
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: put-currencies
+      security:
+        - JWT: []
+      description: 'Edit accepted currencies and '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Currency'
+components:
+  schemas:
+    Product:
+      title: Product
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+        categoryID:
+          type: string
+      required:
+        - name
+        - description
+        - categoryID
+    User:
+      title: User
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        phoneNumber:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - username
+        - email
+    DeliveryInfo:
+      title: DeliveryInfo
+      type: object
+      properties:
+        orderID:
+          type: string
+        accessToken:
+          type: string
+        position:
+          type: string
+    Order:
+      title: Order
+      type: object
+      properties:
+        _id:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    Currency:
+      title: Currency
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        value:
+          type: number
+        charge:
+          type: number
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: basic
+tags:
+  - name: auth
+  - name: basket
+  - name: delivery
+  - name: product
+  - name: user
+  - name: notifications
+  - name: order

@@ -8,19 +8,24 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 
 describe('getRecommendedProducts middleware', () => {
-    beforeEach(async() => {
+    beforeEach((done: Done) => {
         const product1 = new Product();
         product1.name='asd';
         product1.description = 'd';
         product1.price = 222;
         product1.recommended = true;
-        await product1.save();
         const product2 = new Product();
         product2.name='rrr';
         product2.description = 'ewwf';
         product2.price = 44;
         product2.recommended = false;
-        await product2.save();
+        product1.save((err) => {
+            if (err) done(err);
+            product2.save((err) => {
+                if (err) done(err);
+                done();
+            });
+        });
     })
 
     it('should response with a JSON array of products', (done: Done) =>{

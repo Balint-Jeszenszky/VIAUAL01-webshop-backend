@@ -80,11 +80,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Product'
       operationId: get-product-productID
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
       description: Get information of a product
     post:
       summary: Create new product
@@ -404,7 +399,7 @@ components:
       title: Product
       type: object
       properties:
-        _id:
+        id:
           type: string
         name:
           type: string
@@ -414,6 +409,12 @@ components:
           type: string
         categoryID:
           type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        recommended:
+          type: boolean
       required:
         - name
         - description
@@ -422,7 +423,7 @@ components:
       title: User
       type: object
       properties:
-        _id:
+        id:
           type: string
         name:
           type: string
@@ -454,7 +455,7 @@ components:
       title: Order
       type: object
       properties:
-        _id:
+        id:
           type: string
         products:
           type: array

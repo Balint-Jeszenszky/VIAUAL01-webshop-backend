@@ -4,7 +4,7 @@
   "description": "BME VIK AUT Project Laboratory Webshop",
   "main": "build/server.js",
   "scripts": {
-    "test": "tsc && mocha ./build/test --recursive --timeout 12000 --exit",
+    "test": "tsc && mocha ./build/test --recursive --exit",
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only ./server.ts",
     "prod": "tsc && node ./build/server.js"
@@ -41,7 +41,7 @@
     "@types/supertest": "^2.0.10",
     "chai": "^4.3.0",
     "mocha": "^8.3.0",
-    "mockgoose": "^8.0.4",
+    "mongodb-memory-server": "^6.9.3",
     "supertest": "^6.1.3",
     "ts-node-dev": "^1.1.1"
   }

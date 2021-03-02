@@ -4,7 +4,7 @@
   "description": "BME VIK AUT Project Laboratory Webshop",
   "main": "build/server.js",
   "scripts": {
-    "test": "tsc && mocha ./build/test --recursive --timeout 5000 --exit",
+    "test": "tsc && mocha ./build/test --recursive --timeout 12000 --exit",
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only ./server.ts",
     "prod": "tsc && node ./build/server.js"

@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 import { expect } from 'chai';
 import { describe, it, beforeEach, Done } from 'mocha';
 import Product from '../../../../models/Product';
-import app from '../../../../server';
+import app from '../../../../app';
 import request from 'supertest';
 import mongoose from 'mongoose';
 

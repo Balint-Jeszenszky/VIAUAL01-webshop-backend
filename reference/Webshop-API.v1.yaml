@@ -393,6 +393,65 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/Currency'
+  /categories:
+    get:
+      summary: get a list of categories
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+      operationId: get-categories
+      description: get a list of all categories
+    post:
+      summary: create new category
+      tags: []
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+      operationId: post-categories
+      description: create new category
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        description: new categorey
+    put:
+      summary: edit existing category
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: put-categories
+      description: edit category
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        description: updated category
+    delete:
+      summary: delete a category
+      tags: []
+      responses:
+        '204':
+          description: No Content
+      operationId: delete-categories
+      description: delete category
+      security:
+        - JWT: []
 components:
   schemas:
     Product:
@@ -473,6 +532,14 @@ components:
           type: number
         charge:
           type: number
+    Category:
+      title: Category
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
   securitySchemes:
     JWT:
       type: http

@@ -1,5 +1,5 @@
 /**
- * get details of a product
+ * get all categories
  */
 
 import { Request, Response, NextFunction } from 'express';
@@ -11,6 +11,6 @@ import {  } from '../../models/Product';
 export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        res.json({id: '0', name: 'ceruza', description: 'grafit', imageURL: null, categoryID: null, price: 85, stock: 100, recommended: true});
+        res.json([{id: '0', name: 'Cat 1'}, {id: '1', name: 'Cat 2'}]);
     };
 }

@@ -8,6 +8,11 @@ import saveUserMW from '../middleware/auth/saveUserMW';
 import getBasketMW from '../middleware/basket/getBasketMW';
 import updateBasketMW from '../middleware/basket/updateBasketMW';
 
+import createCategoryMW from '../middleware/categories/createCategoryMW';
+import deleteCategoryMW from '../middleware/categories/deleteCategoryMW';
+import editCategoryMW from '../middleware/categories/editCategoryMW';
+import getCategoriesMW from '../middleware/categories/getCategoriesMW';
+
 import getCurrenciesMW from '../middleware/currencies/getCurrenciesMW';
 import updateCurrenciesMW from '../middleware/currencies/updateCurrenciesMW';
 
@@ -74,6 +79,29 @@ export default function(app: express.Application) {
         '/api/currencies',
         authMW(objRepo),
         updateCurrenciesMW(objRepo)
+    );
+
+    app.get(
+        '/api/categories',
+        getCategoriesMW(objRepo)
+    );
+    
+    app.post(
+        '/api/categories',
+        authMW(objRepo),
+        createCategoryMW(objRepo)
+    );
+    
+    app.put(
+        '/api/categories',
+        authMW(objRepo),
+        editCategoryMW(objRepo)
+    );
+    
+    app.delete(
+        '/api/categories',
+        authMW(objRepo),
+        deleteCategoryMW(objRepo)
     );
 
     app.put(

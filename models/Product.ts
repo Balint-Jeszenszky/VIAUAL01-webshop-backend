@@ -11,6 +11,18 @@ export interface IProduct extends Document {
     recommended: boolean
 }
 
+export function toProductDAO(product: IProduct) {
+    return {
+        id: product._id,
+        name: product.name,
+        description: product.description,
+        imageURL: product.imageURL,
+        categoryID: product.categoryID,
+        price: product.price,
+        stock: product.stock
+    };
+}
+
 const ProductSchema: Schema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },

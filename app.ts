@@ -7,7 +7,10 @@ dotenv.config(); // remove in production code
 
 const app = express();
 
+app.use(express.static('static'));
+
 if (process.env.NODE_ENV === 'DEVELOPMENT') app.use(cors()); // remove in production code
+if (process.env.NODE_ENV === 'DEVELOPMENT') app.use((req, res, next) => setTimeout(next, 200)); // artificial latency, remove in production code
 
 routes(app);
 

@@ -176,8 +176,8 @@ export default function(app: express.Application) {
         getRecommendedProductsMW(objRepo)
     );
 
-    app.post(
-        '/api/products/search',
+    app.get(
+        '/api/products/search/:query/page/:page',
         searchProductsMW(objRepo)
     );
 

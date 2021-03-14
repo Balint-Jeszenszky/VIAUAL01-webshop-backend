@@ -297,11 +297,10 @@ paths:
         name: companyID
         in: path
         required: true
-  /products/search:
-    post:
-      summary: 'Send search data, get a product list'
-      tags:
-        - product
+  '/products/search/{query}/page/{page}':
+    get:
+      summary: ''
+      operationId: get-products-search
       responses:
         '200':
           description: OK
@@ -311,18 +310,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-      operationId: post-products-search
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                categoryID:
-                  type: string
-      description: Search for products in a category or in the whole database
+      description: Search for products in the whole database
+      tags:
+        - product
+    parameters:
+      - schema:
+          type: string
+        name: query
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: page
+        in: path
+        required: true
   '/orders/{orderID}':
     get:
       summary: Get order details

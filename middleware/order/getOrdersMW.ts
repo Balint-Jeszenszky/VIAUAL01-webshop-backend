@@ -1,5 +1,5 @@
 /**
- * create new category
+ * get all orders
  */
 
 import { Request, Response, NextFunction } from 'express';
@@ -11,6 +11,7 @@ import {  } from '../../models/Product';
 export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        res.sendStatus(201);
+        res.json([{id: '0', date: new Date()}, {id: '1', date: new Date()}]);
     };
 }
+ 

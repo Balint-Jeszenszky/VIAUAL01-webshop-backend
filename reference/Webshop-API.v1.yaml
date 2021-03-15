@@ -173,7 +173,7 @@ paths:
       security:
         - JWT: []
       description: Delete user account
-  '/basket/{userID}':
+  '/cart/{userID}':
     parameters:
       - schema:
           type: string
@@ -182,8 +182,6 @@ paths:
         required: true
     get:
       summary: Get basket items list
-      tags:
-        - basket
       responses:
         '200':
           description: OK
@@ -193,17 +191,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-      operationId: get-basket-userID
+      operationId: get-cart-userID
       security:
         - JWT: []
-      description: Get the basket content in a list
+      description: Get the cart content in a list
+      tags:
+        - cart
     put:
       summary: Update basket items list
-      tags: []
       responses:
         '204':
           description: No Content
-      operationId: put-basket-userID
+      operationId: put-cart-userID
       security:
         - JWT: []
       requestBody:
@@ -213,7 +212,9 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/Product'
-      description: Basket modifications
+      description: Cart modifications
+      tags:
+        - cart
   '/products/{categoryID}/page/{page}':
     parameters:
       - schema:
@@ -324,7 +325,7 @@ paths:
         name: page
         in: path
         required: true
-  '/orders/{orderID}':
+  '/order/{orderID}':
     get:
       summary: Get order details
       tags:
@@ -362,6 +363,23 @@ paths:
         name: orderID
         in: path
         required: true
+    post:
+      summary: ''
+      operationId: post-order-orderID
+      responses:
+        '201':
+          description: Created
+      description: Add a new order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        description: oreder details
+      security:
+        - JWT: []
+      tags:
+        - order
   /currencies:
     get:
       summary: Get list of accepted currencies
@@ -453,6 +471,30 @@ paths:
       description: delete category
       security:
         - JWT: []
+  '/orders/{userID}':
+    parameters:
+      - schema:
+          type: string
+        name: userID
+        in: path
+        required: true
+    get:
+      summary: Get all orders from the user
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+      operationId: get-orders-userID
+      description: Get the users all order
+      security:
+        - JWT: []
 components:
   schemas:
     Product:
@@ -520,7 +562,9 @@ components:
         products:
           type: array
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: '#/components/schemas/OrderProduct'
+        date:
+          type: string
     Currency:
       title: Currency
       type: object
@@ -541,13 +585,21 @@ components:
           type: string
         name:
           type: string
+    OrderProduct:
+      title: OrderProduct
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/Product'
+        amount:
+          type: number
   securitySchemes:
     JWT:
       type: http
       scheme: basic
 tags:
   - name: auth
-  - name: basket
+  - name: cart
   - name: delivery
   - name: product
   - name: user

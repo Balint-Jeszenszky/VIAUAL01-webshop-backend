@@ -5,8 +5,8 @@ import checkLoginMW from '../middleware/auth/checkLoginMW';
 import checkRegMW from '../middleware/auth/checkRegMW';
 import saveUserMW from '../middleware/auth/saveUserMW';
 
-import getBasketMW from '../middleware/basket/getBasketMW';
-import updateBasketMW from '../middleware/basket/updateBasketMW';
+import getCartMW from '../middleware/cart/getCartMW';
+import updateCartMW from '../middleware/cart/updateCartMW';
 
 import createCategoryMW from '../middleware/categories/createCategoryMW';
 import deleteCategoryMW from '../middleware/categories/deleteCategoryMW';
@@ -18,7 +18,9 @@ import updateCurrenciesMW from '../middleware/currencies/updateCurrenciesMW';
 
 import updateDeliveryMW from '../middleware/delivery/updateDeliveryMW'
 
+import createOrder from '../middleware/order/createOrderMW';
 import getOrderMW from '../middleware/order/getOrderMW';
+import getOrdersMW from '../middleware/order/getOrdersMW';
 import updateOrderMW from '../middleware/order/updateOrderMW';
 
 import checkProductMW from '../middleware/product/checkProductMW';
@@ -58,15 +60,15 @@ export default function(app: express.Application) {
     );
 
     app.get(
-        '/api/basket/:userID',
+        '/api/cart/:userID',
         authMW(objRepo),
-        getBasketMW(objRepo)
+        getCartMW(objRepo)
     );
 
     app.put(
-        '/api/basket/:userID',
+        '/api/cart/:userID',
         authMW(objRepo),
-        updateBasketMW(objRepo)
+        updateCartMW(objRepo)
     );
 
     app.get(
@@ -111,15 +113,27 @@ export default function(app: express.Application) {
     );
 
     app.get(
-        '/api/orders/:orderID',
+        '/api/order/:orderID',
         authMW(objRepo),
         getOrderMW(objRepo)
     );
 
+    app.post(
+        '/api/order/:orderID',
+        authMW(objRepo),
+        createOrder(objRepo)
+    );
+
     app.put(
-        '/api/orders/:orderID',
+        '/api/order/:orderID',
         authMW(objRepo),
         updateOrderMW(objRepo)
+    );
+
+    app.get(
+        '/api/orders/:userID',
+        authMW(objRepo),
+        getOrdersMW(objRepo)
     );
 
     app.get(

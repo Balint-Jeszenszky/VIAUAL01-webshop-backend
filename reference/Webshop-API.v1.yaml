@@ -512,7 +512,7 @@ components:
         categoryID:
           type: string
         price:
-          type: number
+          $ref: '#/components/schemas/Price'
         stock:
           type: integer
         recommended:
@@ -593,6 +593,12 @@ components:
           $ref: '#/components/schemas/Product'
         amount:
           type: number
+    Price:
+      title: Price
+      type: object
+      properties:
+        multipleKey:
+          type: string
   securitySchemes:
     JWT:
       type: http

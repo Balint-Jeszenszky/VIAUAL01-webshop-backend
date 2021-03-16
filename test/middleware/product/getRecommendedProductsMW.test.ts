@@ -12,13 +12,13 @@ describe('getRecommendedProducts middleware', () => {
         const product1 = new Product();
         product1.name='asd';
         product1.description = 'd';
-        product1.price = 222;
+        product1.price = {'HUF': 222};
         product1.recommended = true;
         await product1.save();
         const product2 = new Product();
         product2.name='rrr';
         product2.description = 'ewwf';
-        product2.price = 44;
+        product2.price = {'HUF': 44};
         product2.recommended = false;
         await product2.save();
     })

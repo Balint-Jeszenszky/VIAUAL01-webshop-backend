@@ -1,12 +1,16 @@
 import {Schema, Document} from 'mongoose';
 import db from '../config/db';
 
+type PriceModel = {
+    [key: string]: number
+}
+
 export interface IProduct extends Document {
     name: string,
     description: string,
     imageURL: string,
     categoryID: Schema.Types.ObjectId,
-    price: number,
+    price: PriceModel,
     stock: number,
     recommended: boolean
 }
@@ -28,7 +32,7 @@ const ProductSchema: Schema = new Schema({
     description: { type: String, required: true },
     imageURL: { type: String },
     categoryID: { type: Schema.Types.ObjectId },
-    price: { type: Number, required: true },
+    price: { type: Object, required: true },
     stock: { type: Number },
     recommended: { type: Boolean }
 });

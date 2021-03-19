@@ -8,14 +8,14 @@ type PriceModel = {
 export interface IProduct extends Document {
     name: string,
     description: string,
-    imageURL: string,
-    categoryID: Schema.Types.ObjectId,
+    imageURL: string | null,
+    categoryID: string,
     price: PriceModel,
     stock: number,
     recommended: boolean
 }
 
-export function toProductDAO(product: IProduct) {
+export function toProductDTO(product: IProduct) {
     return {
         id: product._id,
         name: product.name,
@@ -36,5 +36,7 @@ const ProductSchema: Schema = new Schema({
     stock: { type: Number },
     recommended: { type: Boolean }
 });
+
+ProductSchema.index({ name: "text", description: "text" });
 
 export default db.model<IProduct>('Product', ProductSchema);

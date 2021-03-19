@@ -126,7 +126,7 @@ paths:
       security:
         - JWT: []
       description: Delete a product by the admin
-  '/profile/{userID}':
+  '/user/{userID}':
     parameters:
       - schema:
           type: string
@@ -471,13 +471,8 @@ paths:
       description: delete category
       security:
         - JWT: []
-  '/orders/{userID}':
-    parameters:
-      - schema:
-          type: string
-        name: userID
-        in: path
-        required: true
+  /orders:
+    parameters: []
     get:
       summary: Get all orders from the user
       tags:
@@ -492,7 +487,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Order'
       operationId: get-orders-userID
-      description: Get the users all order
+      description: Get all orders for admin
       security:
         - JWT: []
 components:
@@ -512,7 +507,7 @@ components:
         categoryID:
           type: string
         price:
-          $ref: '#/components/schemas/Price'
+          type: object
         stock:
           type: integer
         recommended:
@@ -521,6 +516,7 @@ components:
         - name
         - description
         - categoryID
+        - price
     User:
       title: User
       type: object
@@ -593,12 +589,6 @@ components:
           $ref: '#/components/schemas/Product'
         amount:
           type: number
-    Price:
-      title: Price
-      type: object
-      properties:
-        multipleKey:
-          type: string
   securitySchemes:
     JWT:
       type: http

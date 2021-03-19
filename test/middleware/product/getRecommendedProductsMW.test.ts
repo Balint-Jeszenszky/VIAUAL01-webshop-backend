@@ -1,14 +1,13 @@
 process.env.NODE_ENV = 'test';
 
 import { expect } from 'chai';
-import { describe, it, beforeEach, Done } from 'mocha';
+import { describe, it, before, Done } from 'mocha';
 import Product from '../../../models/Product';
 import app from '../../../app';
 import request from 'supertest';
-import mongoose from 'mongoose';
 
 describe('getRecommendedProducts middleware', () => {
-    beforeEach(async () => {
+    before(async () => {
         const product1 = new Product();
         product1.name='asd';
         product1.description = 'd';
@@ -23,7 +22,7 @@ describe('getRecommendedProducts middleware', () => {
         await product2.save();
     })
 
-    it('should response with a JSON array of products', (done: Done) =>{
+    it('should response with a JSON array of recommended products', (done: Done) =>{
         request(app).get('/api/products')
         .then(res => {
             expect(res.status).to.be.equal(200);
@@ -33,4 +32,3 @@ describe('getRecommendedProducts middleware', () => {
         }).catch(err=>done(err));
     });
 });
-

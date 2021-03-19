@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'test') {
         mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
     });
 } else {
-    mongoose.connect(process.env.DB_CONN || 'mongodb://localhost/webshop', { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(process.env.DB_CONN || 'mongodb://localhost/webshop', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 }
 
 export default mongoose;

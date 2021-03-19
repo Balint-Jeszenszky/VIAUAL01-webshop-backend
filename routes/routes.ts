@@ -8,13 +8,13 @@ import saveUserMW from '../middleware/auth/saveUserMW';
 import getCartMW from '../middleware/cart/getCartMW';
 import updateCartMW from '../middleware/cart/updateCartMW';
 
-import createCategoryMW from '../middleware/categories/createCategoryMW';
-import deleteCategoryMW from '../middleware/categories/deleteCategoryMW';
-import editCategoryMW from '../middleware/categories/editCategoryMW';
-import getCategoriesMW from '../middleware/categories/getCategoriesMW';
+import createCategoryMW from '../middleware/category/createCategoryMW';
+import deleteCategoryMW from '../middleware/category/deleteCategoryMW';
+import editCategoryMW from '../middleware/category/editCategoryMW';
+import getCategoriesMW from '../middleware/category/getCategoriesMW';
 
-import getCurrenciesMW from '../middleware/currencies/getCurrenciesMW';
-import updateCurrenciesMW from '../middleware/currencies/updateCurrenciesMW';
+import getCurrenciesMW from '../middleware/currency/getCurrenciesMW';
+import updateCurrenciesMW from '../middleware/currency/updateCurrenciesMW';
 
 import updateDeliveryMW from '../middleware/delivery/updateDeliveryMW'
 
@@ -41,11 +41,17 @@ import updateUserMW from '../middleware/user/updateUserMW';
 
 import ObjectRepository from '../models/ObjectRepository';
 import Product from '../models/Product';
+import Category from '../models/Category';
+import User from '../models/User';
+import Order from '../models/Order';
 
 export default function(app: express.Application) {
 
     const objRepo: ObjectRepository = {
-        Product
+        Product,
+        Category,
+        User,
+        Order
     }
 
     app.post(
@@ -131,7 +137,7 @@ export default function(app: express.Application) {
     );
 
     app.get(
-        '/api/orders/:userID',
+        '/api/orders',
         authMW(objRepo),
         getOrdersMW(objRepo)
     );
@@ -162,20 +168,20 @@ export default function(app: express.Application) {
     );
 
     app.get(
-        '/api/profile/:userID',
+        '/api/user/:userID',
         authMW(objRepo),
         getUserMW(objRepo)
     );
 
     app.put(
-        '/api/profile/:userID',
+        '/api/user/:userID',
         authMW(objRepo),
         checkUserDataMW(objRepo),
         updateUserMW(objRepo)
     );
 
     app.delete(
-        '/api/profile/:userID',
+        '/api/user/:userID',
         authMW(objRepo),
         deleteUserMW(objRepo)
     );

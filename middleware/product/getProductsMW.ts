@@ -1,17 +1,28 @@
 /**
  * get a list of products
- * category and page number set on req.params
+ * category as :categoryID and page number as :page set on req.params
  */
 
 import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
-import mongoose from 'mongoose';
-import {  } from '../../models/Product';
+import { Model } from 'mongoose';
+import { IProduct, toProductDTO } from '../../models/Product';
 
 export default function(objRepo: ObjectRepository) {
+    const ProductModel: Model<IProduct> = requireOption(objRepo, 'Product');
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        res.json([{id: '0', name :'ceruza', description: 'grafit'+req.params.categoryID, imageURL: '640x480.png', categoryID: '1', price: {HUF: 85, EUR: 0.229, USD: 0.274}, stock: 100, recommended: true}]);
+        const page = parseInt(req.params.page);
+        if (isNaN(page)) {
+            res.sendStatus(400);
+        } else {
+            try {
+                const products = await ProductModel.find({ categoryID: req.params.categoryID }).skip(18 * (page - 1)).limit(18);
+                res.json(products.map(e => toProductDTO(e)));
+            } catch(e) {
+                next(e);
+            }
+        }
     };
 }

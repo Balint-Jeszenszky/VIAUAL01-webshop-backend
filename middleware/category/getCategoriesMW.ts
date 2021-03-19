@@ -1,22 +1,21 @@
 /**
- * search for products
- * details on req.params: query :query, page :page
+ * get all categories from the database
+ * responds with an array of categories
  */
 
 import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
 import { Model } from 'mongoose';
-import { IProduct, toProductDTO } from '../../models/Product';
+import { ICategory, toCategoryDTO } from '../../models/Category';
 
 export default function(objRepo: ObjectRepository) {
-    const ProductModel: Model<IProduct> = requireOption(objRepo, 'Product');
+    const CategoryModel: Model<ICategory> = requireOption(objRepo, 'Category');
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        const query = (req.params.query as string).replace(/\+/g, ' ');
         try {
-            const products = await ProductModel.find({ $text: { $search: query}});
-            res.json(products.map(e => toProductDTO(e)));
+            const categories = await CategoryModel.find({});
+            res.json(categories.map(e => toCategoryDTO(e)));
         } catch (e) {
             next(e);
         }

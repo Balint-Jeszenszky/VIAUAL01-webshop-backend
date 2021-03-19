@@ -1,16 +1,27 @@
 /**
  * get details of a product
+ * productID set on req.params.productID
  */
 
 import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
-import mongoose from 'mongoose';
-import {  } from '../../models/Product';
+import { Model } from 'mongoose';
+import { IProduct, toProductDTO } from '../../models/Product';
 
 export default function(objRepo: ObjectRepository) {
+    const ProductModel: Model<IProduct> = requireOption(objRepo, 'Product');
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        res.json({id: '0', name: 'ceruza', description: 'grafit', imageURL: '640x480.png', categoryID: 'catID', price: {HUF: 85, EUR: 0.229, USD: 0.274}, stock: 100, recommended: true});
+        try {
+            const product = await ProductModel.findOne({ _id: req.params.productID });
+            if (product) {
+                res.json(toProductDTO(product));
+            } else {
+                res.sendStatus(404);
+            }
+        } catch(e) {
+            next(e);
+        }
     };
 }

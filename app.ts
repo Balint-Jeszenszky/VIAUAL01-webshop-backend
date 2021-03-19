@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from './routes/routes';
+import Product from './models/Product';
 import dotenv from 'dotenv'; // remove in production code
 import cors from 'cors'; // remove in production code
 
@@ -16,7 +17,7 @@ routes(app);
 
 app.use((err: express.ErrorRequestHandler, req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.status(500).end('Something went wrong...');
-    console.log(err);
+    console.log(`Error: ${err}`);
 });
 
 export default app;

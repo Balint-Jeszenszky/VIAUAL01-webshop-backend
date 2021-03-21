@@ -12,18 +12,19 @@ describe('getProducts middleware', () => {
     before(async () => {
         const cat = new Category();
         cat.name = 'cccc';
+        cat.productNumber = 5;
         await cat.save();
         id = cat._id;
         const product1 = new Product();
         product1.name='asdasd';
         product1.description = 'dd';
-        product1.price = {'HUF': 2222};
+        product1.price = 2222;
         product1.categoryID = id;
         await product1.save();
         const product2 = new Product();
         product2.name='rrrr';
         product2.description = 'ewwwf';
-        product2.price = {'HUF': 444};
+        product2.price = 444;
         await product2.save();
     });
 

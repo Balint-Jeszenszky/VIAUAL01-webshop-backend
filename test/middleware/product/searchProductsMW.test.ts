@@ -11,17 +11,17 @@ describe('searchProducts middleware', () => {
         const product1 = new Product();
         product1.name='alma fa';
         product1.description = 'adfda';
-        product1.price = {'HUF': 222};
+        product1.price = 222;
         await product1.save();
         const product2 = new Product();
         product2.name='valami mas';
         product2.description = 'asdfadsdf';
-        product2.price = {'HUF': 44};
+        product2.price = 44;
         await product2.save();
         const product3 = new Product();
         product3.name='az';
         product3.description = 'ez is alma';
-        product3.price = {'HUF': 44};
+        product3.price = 44;
         await product3.save();
     });
 

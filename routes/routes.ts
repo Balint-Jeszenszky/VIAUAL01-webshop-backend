@@ -13,6 +13,7 @@ import deleteCategoryMW from '../middleware/category/deleteCategoryMW';
 import editCategoryMW from '../middleware/category/editCategoryMW';
 import getCategoriesMW from '../middleware/category/getCategoriesMW';
 
+import getAcceptedCurrenciesMW from '../middleware/currency/getAcceptedCurrenciesMW';
 import getCurrenciesMW from '../middleware/currency/getCurrenciesMW';
 import updateCurrenciesMW from '../middleware/currency/updateCurrenciesMW';
 
@@ -44,6 +45,7 @@ import Product from '../models/Product';
 import Category from '../models/Category';
 import User from '../models/User';
 import Order from '../models/Order';
+import Currency from '../models/Currency';
 
 export default function(app: express.Application) {
 
@@ -51,7 +53,8 @@ export default function(app: express.Application) {
         Product,
         Category,
         User,
-        Order
+        Order,
+        Currency
     }
 
     app.post(
@@ -68,6 +71,7 @@ export default function(app: express.Application) {
     app.get(
         '/api/cart/:userID',
         authMW(objRepo),
+        getCurrenciesMW(objRepo),
         getCartMW(objRepo)
     );
 
@@ -80,7 +84,8 @@ export default function(app: express.Application) {
     app.get(
         '/api/currencies',
         authMW(objRepo),
-        getCurrenciesMW(objRepo)
+        getCurrenciesMW(objRepo),
+        getAcceptedCurrenciesMW(objRepo)
     );
 
     app.put(
@@ -121,6 +126,7 @@ export default function(app: express.Application) {
     app.get(
         '/api/order/:orderID',
         authMW(objRepo),
+        getCurrenciesMW(objRepo),
         getOrderMW(objRepo)
     );
 
@@ -144,6 +150,7 @@ export default function(app: express.Application) {
 
     app.get(
         '/api/product/:productID',
+        getCurrenciesMW(objRepo),
         getProductMW(objRepo)
     );
 
@@ -188,16 +195,19 @@ export default function(app: express.Application) {
 
     app.get(
         '/api/products/:categoryID/page/:page',
+        getCurrenciesMW(objRepo),
         getProductsMW(objRepo)
     );
 
     app.get(
         '/api/products',
+        getCurrenciesMW(objRepo),
         getRecommendedProductsMW(objRepo)
     );
 
     app.get(
         '/api/products/search/:query/page/:page',
+        getCurrenciesMW(objRepo),
         searchProductsMW(objRepo)
     );
 

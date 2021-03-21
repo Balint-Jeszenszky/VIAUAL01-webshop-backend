@@ -1,6 +1,5 @@
 import express from 'express';
 import routes from './routes/routes';
-import Product from './models/Product';
 import dotenv from 'dotenv'; // remove in production code
 import cors from 'cors'; // remove in production code
 

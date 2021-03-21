@@ -16,7 +16,7 @@ export default function(objRepo: ObjectRepository) {
         try {
             const product = await ProductModel.findOne({ _id: req.params.productID });
             if (product) {
-                res.json(toProductDTO(product));
+                res.json(toProductDTO(product, res.locals.currencies));
             } else {
                 res.sendStatus(404);
             }

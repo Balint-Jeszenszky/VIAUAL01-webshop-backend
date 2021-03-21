@@ -5,14 +5,20 @@ import { describe, it, before, Done } from 'mocha';
 import Order from '../../../models/Order';
 import app from '../../../app';
 import request from 'supertest';
+import Product from '../../../models/Product';
 
 describe('getOrder middleware', () => {
     let id = '';
 
     before(async () => {
+        const product = new Product();
+        product.name = 'foo';
+        product.description = 'bar';
+        product.price = 89;
+        await product.save();
         const order = new Order();
         order.date = new Date();
-        order.products = [{productID: 'asd', amount: 3}];
+        order.products = [{id: product._id, amount: 3}];
         await order.save();
         id = order._id;
     });

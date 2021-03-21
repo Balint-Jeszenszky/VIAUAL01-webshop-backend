@@ -1,17 +1,34 @@
 /**
  * returns the content of the users basket
+ * userID set on req.params.userID
  */
 
 import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
-import mongoose from 'mongoose';
-import {  } from '../../models/Product';
+import { Model } from 'mongoose';
+import { IUser } from '../../models/User';
+import { IProduct, toProductDTO } from '../../models/Product';
 
 export default function(objRepo: ObjectRepository) {
+    const UserModel: Model<IUser> = requireOption(objRepo, 'User');
+    const ProductModel: Model<IProduct> = requireOption(objRepo, 'Product');
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        res.json([{product: {name: 'cupidatat', description:'amet veniam', categoryID: '0', recommended: true, stock: 25, id: '0', 'imageUrl': '', price: {HUF: 85, EUR: 0.229, USD: 0.274}}, amount: 3},
-                {product: {name: 'tempor', description:'irure consequat tempor sunt', categoryID: '1', recommended: true, stock: 33, id: '1', 'imageUrl': '', price: {HUF: 85, EUR: 0.229, USD: 0.274}}, amount: 9}]);
+        try {
+            const user = await UserModel.findOne({ _id: req.params.userID });
+            if (user) {
+                const cart = [];
+                for (const prod of user.cart) {
+                    const product = await ProductModel.findOne({ _id: prod.id });
+                    if (product) cart.push({product: toProductDTO(product, res.locals.currencies), amount: prod.amount});
+                }
+                res.json(cart);
+            } else {
+                res.sendStatus(404);
+            }
+        } catch(e) {
+            next(e);
+        }
     };
 }

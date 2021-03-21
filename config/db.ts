@@ -1,8 +1,5 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-
-dotenv.config();
 
 if (process.env.NODE_ENV === 'test') {
     const mongoServer = new MongoMemoryServer();

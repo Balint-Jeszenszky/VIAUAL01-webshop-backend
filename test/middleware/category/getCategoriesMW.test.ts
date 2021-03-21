@@ -10,9 +10,11 @@ describe('getCategories middleware', () => {
     before(async () => {
         const cat1 = new Category();
         cat1.name='asd';
+        cat1.productNumber = 7;
         await cat1.save();
         const cat2 = new Category();
         cat2.name='rrr';
+        cat2.productNumber = 72;
         await cat2.save();
     })
 

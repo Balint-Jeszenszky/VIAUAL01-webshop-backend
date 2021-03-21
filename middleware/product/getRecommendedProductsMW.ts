@@ -15,7 +15,7 @@ export default function(objRepo: ObjectRepository) {
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
             const products = await ProductModel.find({ recommended: true});
-            res.json(products.map(e => toProductDTO(e)));
+            res.json(products.map(e => toProductDTO(e, res.locals.currencies)));
         } catch (e) {
             next(e);
         }

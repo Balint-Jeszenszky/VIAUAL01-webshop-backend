@@ -16,7 +16,7 @@ export default function(objRepo: ObjectRepository) {
         const query = (req.params.query as string).replace(/\+/g, ' ');
         try {
             const products = await ProductModel.find({ $text: { $search: query}});
-            res.json(products.map(e => toProductDTO(e)));
+            res.json(products.map(e => toProductDTO(e, res.locals.currencies)));
         } catch (e) {
             next(e);
         }

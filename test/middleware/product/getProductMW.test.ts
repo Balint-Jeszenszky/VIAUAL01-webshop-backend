@@ -13,7 +13,7 @@ describe('getProduct middleware', () => {
         const product = new Product();
         product.name='eee';
         product.description = 'd';
-        product.price = {'HUF': 222};
+        product.price = 222;
         await product.save();
         id = product._id;
     });

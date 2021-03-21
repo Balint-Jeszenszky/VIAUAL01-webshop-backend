@@ -19,7 +19,7 @@ export default function(objRepo: ObjectRepository) {
         } else {
             try {
                 const products = await ProductModel.find({ categoryID: req.params.categoryID }).skip(18 * (page - 1)).limit(18);
-                res.json(products.map(e => toProductDTO(e)));
+                res.json(products.map(e => toProductDTO(e, res.locals.currencies)));
             } catch(e) {
                 next(e);
             }

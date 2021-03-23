@@ -100,19 +100,19 @@ export default function(app: express.Application) {
     );
     
     app.post(
-        '/api/categories',
+        '/api/category',
         authMW(objRepo),
         createCategoryMW(objRepo)
     );
     
     app.put(
-        '/api/categories',
+        '/api/category/:categoryId',
         authMW(objRepo),
         editCategoryMW(objRepo)
     );
     
     app.delete(
-        '/api/categories',
+        '/api/category/:categoryId',
         authMW(objRepo),
         deleteCategoryMW(objRepo)
     );
@@ -155,7 +155,7 @@ export default function(app: express.Application) {
     );
 
     app.post(
-        '/api/product/:productID',
+        '/api/product',
         authMW(objRepo),
         checkProductMW(objRepo),
         saveProductMW(objRepo)

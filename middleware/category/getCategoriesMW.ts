@@ -14,7 +14,7 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const categories = await CategoryModel.find({});
+            const categories = await CategoryModel.find({}).sort({ name: 1 });
             res.json(categories.map(e => toCategoryDTO(e)));
         } catch (e) {
             next(e);

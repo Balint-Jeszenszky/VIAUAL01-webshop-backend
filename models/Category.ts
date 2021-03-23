@@ -10,7 +10,7 @@ export function toCategoryDTO(category: ICategory) {
     return {
         id: category._id,
         name: category.name,
-        productNumber: Math.ceil(category.productNumber / 18)
+        productNumber: category.productNumber
     };
 }
 

@@ -427,50 +427,7 @@ paths:
                   $ref: '#/components/schemas/Category'
       operationId: get-categories
       description: get a list of all categories
-    post:
-      summary: create new category
-      tags: []
-      responses:
-        '201':
-          description: Created
-        '409':
-          description: Conflict
-      operationId: post-categories
-      description: create new category
-      security:
-        - JWT: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Category'
-        description: new categorey
-    put:
-      summary: edit existing category
-      tags: []
-      responses:
-        '204':
-          description: No Content
-      operationId: put-categories
-      description: edit category
-      security:
-        - JWT: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Category'
-        description: updated category
-    delete:
-      summary: delete a category
-      tags: []
-      responses:
-        '204':
-          description: No Content
-      operationId: delete-categories
-      description: delete category
-      security:
-        - JWT: []
+    parameters: []
   /orders:
     parameters: []
     get:
@@ -490,6 +447,63 @@ paths:
       description: Get all orders for admin
       security:
         - JWT: []
+  '/category/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    put:
+      summary: edit category
+      tags:
+        - category
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: put-category-id
+      description: edit category
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+    delete:
+      summary: delete category
+      tags:
+        - category
+      responses:
+        '204':
+          description: No Content
+      operationId: delete-category-id
+      description: delete category
+      security:
+        - JWT: []
+  /category:
+    post:
+      summary: create new category
+      tags:
+        - category
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+      operationId: post-category
+      description: create new category
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
 components:
   schemas:
     Product:
@@ -601,3 +615,4 @@ tags:
   - name: user
   - name: notifications
   - name: order
+  - name: category

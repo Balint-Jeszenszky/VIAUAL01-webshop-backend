@@ -5,12 +5,35 @@
 import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
-import mongoose from 'mongoose';
-import {  } from '../../models/Product';
+import { Model } from 'mongoose';
+import { ICategory } from '../../models/Category';
 
 export default function(objRepo: ObjectRepository) {
+    const CategoryModel: Model<ICategory> = requireOption(objRepo, 'Category');
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        res.sendStatus(201);
+        if (req.body.name === undefined) {
+            return res.sendStatus(400);
+        }
+        
+        try {
+            const exists = await CategoryModel.exists({ name: req.body.name });
+            if (exists) {
+                return res.sendStatus(409);
+            }
+        } catch(e) {
+            return next(e);
+        }
+
+        const newCategory = new CategoryModel();
+        newCategory.name = req.body.name;
+        newCategory.productNumber = 0;
+
+        try {
+            await newCategory.save();
+            return res.sendStatus(201);
+        } catch (e) {
+            return next(e);
+        }
     };
 }

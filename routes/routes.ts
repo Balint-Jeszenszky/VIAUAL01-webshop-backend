@@ -24,7 +24,6 @@ import getOrderMW from '../middleware/order/getOrderMW';
 import getOrdersMW from '../middleware/order/getOrdersMW';
 import updateOrderMW from '../middleware/order/updateOrderMW';
 
-import checkProductMW from '../middleware/product/checkProductMW';
 import deleteProductMW from '../middleware/product/deleteProductMW';
 import getProductMW from '../middleware/product/getProductMW';
 import getProductsMW from '../middleware/product/getProductsMW';
@@ -157,14 +156,12 @@ export default function(app: express.Application) {
     app.post(
         '/api/product',
         authMW(objRepo),
-        checkProductMW(objRepo),
         saveProductMW(objRepo)
     );
 
     app.put(
         '/api/product/:productID',
        authMW(objRepo),
-       checkProductMW(objRepo),
        updateProductMW(objRepo)
     );
 

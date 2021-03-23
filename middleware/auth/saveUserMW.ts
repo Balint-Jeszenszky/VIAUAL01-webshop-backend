@@ -12,8 +12,8 @@ import { IUser } from '../../models/User';
 
 export default function(objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
-    const hashSecret = process.env.HASH_SECRET;
-    if (!hashSecret) {
+    const hashSecret = process.env.HASH_SECRET || 'test';
+    if (hashSecret === 'test' && process.env.NODE_ENV !== 'test') {
         throw new TypeError('HASH_SECRET not set in .env');
     }
 

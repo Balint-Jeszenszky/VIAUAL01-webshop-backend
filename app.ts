@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import fs from 'fs';
 import morgan from 'morgan';
 import path from 'path';
+import externalServices from './externalServices/externalServices';
 import dotenv from 'dotenv'; // remove in production code
 import cors from 'cors'; // remove in production code
 
@@ -19,9 +20,13 @@ app.use(helmet());
 app.use(express.static('static'));
 app.use(json());
 
-if (process.env.NODE_ENV === 'DEVELOPMENT') app.use(cors()); // for separate client development, remove in production code
-if (process.env.NODE_ENV === 'DEVELOPMENT') app.use((req, res, next) => setTimeout(next, 200)); // artificial latency, remove in production code
+if (process.env.NODE_ENV === 'DEVELOPMENT') { // remove in production code
+    app.use(cors()); // for separate client development
+    app.use((req, res, next) => setTimeout(next, 200)); // artificial latency
+    //app.use(morgan('combined'));
+}
 
+externalServices();
 routes(app);
 
 app.use((err: express.ErrorRequestHandler, req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -215,6 +215,25 @@ paths:
       description: Cart modifications
       tags:
         - cart
+    post:
+      summary: ''
+      operationId: post-cart-userID
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+      description: Add product to cart
+      security:
+        - JWT: []
+      tags:
+        - cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListItem'
+        description: Product id and amunt
   '/products/{categoryID}/page/{page}':
     parameters:
       - schema:
@@ -363,23 +382,6 @@ paths:
         name: orderID
         in: path
         required: true
-    post:
-      summary: ''
-      operationId: post-order-orderID
-      responses:
-        '201':
-          description: Created
-      description: Add a new order
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Order'
-        description: oreder details
-      security:
-        - JWT: []
-      tags:
-        - order
   /currencies:
     get:
       summary: Get list of accepted currencies
@@ -392,7 +394,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Currency'
+                  type: string
       operationId: get-currencies
       description: Get a list of accepted currencies
     put:
@@ -504,6 +506,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Category'
+  '/order/{userId}':
+    post:
+      summary: create new order
+      tags:
+        - order
+      responses:
+        '201':
+          description: Created
+      operationId: post-order
+      description: Add a new order
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        description: oreder details
+    parameters: []
 components:
   schemas:
     Product:
@@ -601,6 +622,14 @@ components:
       properties:
         product:
           $ref: '#/components/schemas/Product'
+        amount:
+          type: number
+    ListItem:
+      title: ListItem
+      type: object
+      properties:
+        productId:
+          type: string
         amount:
           type: number
   securitySchemes:

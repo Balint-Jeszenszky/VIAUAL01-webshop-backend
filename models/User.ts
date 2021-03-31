@@ -6,7 +6,7 @@ type Order = {
     date: Date
 }
 
-type ListItem = {
+export type ListItem = {
     id: string,
     amount: number
 };

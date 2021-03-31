@@ -5,6 +5,7 @@ import checkLoginMW from '../middleware/auth/checkLoginMW';
 import checkRegMW from '../middleware/auth/checkRegMW';
 import saveUserMW from '../middleware/auth/saveUserMW';
 
+import addToCartMW from '../middleware/cart/addToCartMW';
 import getCartMW from '../middleware/cart/getCartMW';
 import updateCartMW from '../middleware/cart/updateCartMW';
 
@@ -74,6 +75,12 @@ export default function(app: express.Application) {
         getCartMW(objRepo)
     );
 
+    app.post(
+        '/api/cart/:userId',
+        authMW(objRepo),
+        addToCartMW(objRepo)
+    );
+
     app.put(
         '/api/cart/:userID',
         authMW(objRepo),
@@ -130,7 +137,7 @@ export default function(app: express.Application) {
     );
 
     app.post(
-        '/api/order/:orderID',
+        '/api/order/:userId',
         authMW(objRepo),
         createOrder(objRepo)
     );

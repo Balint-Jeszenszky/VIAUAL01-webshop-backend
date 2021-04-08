@@ -6,24 +6,26 @@
 import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
-import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { IUser } from '../../models/User';
 
 export default function(objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
-    const hashSecret = process.env.HASH_SECRET || 'test';
-    if (hashSecret === 'test' && process.env.NODE_ENV !== 'test') {
-        throw new TypeError('HASH_SECRET not set in .env');
-    }
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        const password = crypto.createHmac("sha512", hashSecret).update(req.body.password).digest("base64");
+        let passwordHash;
+        try {
+            passwordHash = await bcrypt.hash(req.body.password, 10);
+        } catch (e) {
+            return next(e);
+        }
+
         const newUser = new UserModel();
         newUser.name = req.body.name;
         newUser.username = req.body.username;
         newUser.email = req.body.email;
-        newUser.password = password;
+        newUser.password = passwordHash;
         newUser.phoneNumber = '';
         newUser.address = '';
         newUser.orders = [];

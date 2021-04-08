@@ -525,6 +525,48 @@ paths:
               $ref: '#/components/schemas/Order'
         description: oreder details
     parameters: []
+  /auth/refreshToken:
+    post:
+      summary: post a refresh token
+      tags:
+        - auth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accesToken:
+                    type: string
+        '401':
+          description: Unauthorized
+      operationId: post-auth-refreshToken
+      description: post a refresh token to get a new access token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+        description: refresh token
+  /auth/logout:
+    delete:
+      summary: 'log out, delete refresh token'
+      tags:
+        - auth
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+      operationId: delete-auth-logout
+      description: 'logout, remove refresh oken'
+      security:
+        - JWT: []
 components:
   schemas:
     Product:

@@ -7,12 +7,12 @@ import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
 import { Model } from 'mongoose';
 import { IUser } from '../../models/User';
-import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 
 export default function(objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
-    const hashSecret = process.env.HASH_SECRET || 'test';
-    if (hashSecret === 'test' && process.env.NODE_ENV !== 'test') {
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || 'test';
+    if (accessTokenSecret === 'test' && process.env.NODE_ENV !== 'test') {
         throw new TypeError('HASH_SECRET not set in .env');
     }
 
@@ -63,7 +63,13 @@ export default function(objRepo: ObjectRepository) {
                     errors.push('pass_short');
                 }
 
-                const oldPassword = crypto.createHmac("sha512", hashSecret).update(req.body.oldPassword).digest("base64");
+                let oldPassword;
+                try {
+                    oldPassword = await bcrypt.hash(req.body.password, 10);
+                } catch (e) {
+                    return next(e);
+                }
+
                 if (oldPassword !== user.password) {
                     errors.push('wrong_pass');
                 }
@@ -71,7 +77,7 @@ export default function(objRepo: ObjectRepository) {
                 if (req.body.newPassword !== req.body.confirmPassword) {
                     errors.push('pass_not_match');
                 }
-                res.locals.password = crypto.createHmac("sha512", hashSecret).update(req.body.newPassword).digest("base64");
+                res.locals.password = await bcrypt.hash(req.body.password, 10);
             }
         }
 

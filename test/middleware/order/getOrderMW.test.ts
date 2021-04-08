@@ -6,9 +6,12 @@ import Order from '../../../models/Order';
 import app from '../../../app';
 import request from 'supertest';
 import Product from '../../../models/Product';
+import User from '../../../models/User';
+import jwt from 'jsonwebtoken';
 
 describe('getOrder middleware', () => {
     let id = '';
+    let token = '';
 
     before(async () => {
         const product = new Product();
@@ -21,10 +24,25 @@ describe('getOrder middleware', () => {
         order.products = [{id: product._id, amount: 3}];
         await order.save();
         id = order._id;
+        const user = new User();
+        user.name = 'asd';
+        user.username = 'asd';
+        user.email = 'asd';
+        user.password = 'asd';
+        user.refreshToken = 'asd';
+        await user.save();
+        token = jwt.sign({userId: user._id}, process.env.ACCESS_TOKEN_SECRET || 'test');
     });
+
+    after(async () => {
+        await Product.deleteMany({});
+        await Order.deleteMany({});
+        await User.deleteMany({});
+    })
 
     it('should response with an order', (done: Done) => {
         request(app).get(`/api/order/${id}`)
+        .auth(token, { type: 'bearer' })
         .then(res => {
             expect(res.status).to.be.equal(200);
             expect(res.body.products.length).to.be.equal(1);
@@ -35,6 +53,7 @@ describe('getOrder middleware', () => {
 
     it('should response with a 404 not found', (done: Done) => {
         request(app).get(`/api/product/123456781234567812345678`)
+        .auth(token, { type: 'bearer' })
         .then(res => {
             expect(res.status).to.be.equal(404);
             done();

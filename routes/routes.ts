@@ -3,6 +3,8 @@ import express from 'express';
 import authMW from '../middleware/auth/authMW';
 import checkLoginMW from '../middleware/auth/checkLoginMW';
 import checkRegMW from '../middleware/auth/checkRegMW';
+import logoutMW from '../middleware/auth/logoutMW';
+import refreshTokenMW from '../middleware/auth/refreshTokenMW';
 import saveUserMW from '../middleware/auth/saveUserMW';
 
 import addToCartMW from '../middleware/cart/addToCartMW';
@@ -66,6 +68,16 @@ export default function(app: express.Application) {
     app.post(
         '/api/auth/login',
         checkLoginMW(objRepo)
+    );
+
+    app.post(
+        '/api/auth/refreshToken',
+        refreshTokenMW(objRepo)
+    );
+
+    app.delete(
+        '/api/auth/logout',
+        logoutMW(objRepo)
     );
 
     app.get(

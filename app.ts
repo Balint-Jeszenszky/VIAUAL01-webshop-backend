@@ -1,15 +1,14 @@
 import express from 'express';
 import routes from './routes/routes';
-import { json } from 'body-parser';
 import helmet from 'helmet';
 import fs from 'fs';
 import morgan from 'morgan';
 import path from 'path';
 import externalServices from './externalServices/externalServices';
-import dotenv from 'dotenv'; // remove in production code
+import dotenv from 'dotenv';
 import cors from 'cors'; // remove in production code
 
-dotenv.config(); // remove in production code
+dotenv.config();
 
 const app = express();
 
@@ -18,7 +17,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, process.env.LO
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use(helmet());
 app.use(express.static('static'));
-app.use(json());
+app.use(express.json());
 
 if (process.env.NODE_ENV === 'DEVELOPMENT') { // remove in production code
     app.use(cors()); // for separate client development

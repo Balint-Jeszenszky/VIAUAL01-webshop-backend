@@ -38,7 +38,7 @@ describe('POST new user', () => {
         }).catch(err=>done(err));
     });
 
-    it('should response email iinvalid error', (done: Done) => {
+    it('should response email invalid error', (done: Done) => {
         request(app).post('/api/auth/register')
         .send({name: 'asd', username: 'username', email: 'mail', password: 'aaaaaaaa'})
         .then(res => {

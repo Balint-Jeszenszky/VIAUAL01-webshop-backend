@@ -5,12 +5,48 @@
 import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
-import mongoose from 'mongoose';
-import {  } from '../../models/Product';
+import { Model } from 'mongoose';
+import { IUser } from '../../models/User';
+import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 export default function(objRepo: ObjectRepository) {
+    const UserModel: Model<IUser> = requireOption(objRepo, 'User');
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || 'test';
+    if (accessTokenSecret === 'test' && process.env.NODE_ENV !== 'test') {
+        throw new TypeError('HASH_SECRET not set in .env');
+    }
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        next();
+        const authHeader = req.headers['authorization'];
+        const token = authHeader?.split(' ')[1];
+        
+        if (!token) {
+            return res.sendStatus(401);
+        }
+        
+        try {
+            const data = jwt.verify(token, accessTokenSecret) as {userId: string};
+            const user = await UserModel.findById(data.userId);
+            if (!user || user.refreshToken === null) return res.sendStatus(403);
+            res.locals.user = user;
+            return next();
+        } catch (e) {
+            if (e instanceof JsonWebTokenError) {
+                if (e instanceof TokenExpiredError) {
+                    try {
+                        const user = await UserModel.findOne({ refreshToken: token });
+                        if (user) {
+                            user.refreshToken = null;
+                            await user.save();
+                        }
+                    } catch (e) {
+                        return next(e);
+                    }
+                }
+                return res.sendStatus(403);
+            }
+            
+            return next(e);
+        }
     };
 }

@@ -22,6 +22,7 @@ export default function (objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         const refreshToken = req.body.refreshToken;
+        console.log(refreshToken)
         if (refreshToken === undefined) return res.sendStatus(401);
 
         try {

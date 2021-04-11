@@ -18,7 +18,7 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         if (req.body === undefined ||
-            req.params.userrID !== req.body.userID ||
+            req.params.userrID !== req.body.userId ||
             req.params.userrID ||
             req.body.name === undefined ||
             req.body.email === undefined
@@ -30,7 +30,7 @@ export default function(objRepo: ObjectRepository) {
 
         try {
             const user = await UserModel.findOne({ email: req.body.email });
-            if (user && user._id != req.params.userID) {
+            if (user && user._id != req.params.userId) {
                 console.log(typeof user._id)
                 errors.push('email_reg');
             }
@@ -43,7 +43,7 @@ export default function(objRepo: ObjectRepository) {
             errors.push('email_invalid');
         }
         
-        const user = await UserModel.findById(req.params.userID);
+        const user = await UserModel.findById(req.params.userId);
         if (!user) return res.sendStatus(400);
 
         if (req.body.oldPassword !== undefined) {

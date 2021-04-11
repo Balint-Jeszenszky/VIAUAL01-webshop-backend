@@ -1,6 +1,6 @@
 /**
  * returns the content of the users basket
- * userID set on req.params.userID
+ * userId set on req.params.userId
  */
 
 import { Request, Response, NextFunction } from 'express';
@@ -16,7 +16,7 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await UserModel.findOne({ _id: req.params.userID });
+            const user = await UserModel.findOne({ _id: req.params.userId });
             if (user) {
                 const cart = [];
                 for (const prod of user.cart) {

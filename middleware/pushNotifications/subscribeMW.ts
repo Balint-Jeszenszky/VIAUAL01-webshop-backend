@@ -1,6 +1,5 @@
 /**
- * deletes the user account
- * userId set on req.params
+ * subscribe for notifications
  */
 
 import { Request, Response, NextFunction } from 'express';
@@ -14,12 +13,13 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await UserModel.findByIdAndDelete(req.params.userId);
+            const user = await UserModel.findById(res.locals.user.userId);
             if (user) {
-                return res.sendStatus(204);
-            } else {
-                return res.sendStatus(400);
+                user.pushSubscription = req.body;
+                await user.save();
+                return res.sendStatus(201);
             }
+            return res.sendStatus(400);
         } catch (e) {
             return next(e);
         }

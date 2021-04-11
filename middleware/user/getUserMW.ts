@@ -1,6 +1,6 @@
 /**
  * get the user's details
- * :userID set or req.params
+ * :userId set or req.params
  */
 
 import { Request, Response, NextFunction } from 'express';
@@ -14,7 +14,7 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await UserModel.findOne({ _id: req.params.userID });
+            const user = await UserModel.findOne({ _id: req.params.userId });
             if (user) {
                 res.json(toUserDTO(user));
             } else {

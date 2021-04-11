@@ -35,7 +35,8 @@ import saveProductMW from '../middleware/product/saveProductMW';
 import searchProductsMW from '../middleware/product/searchProductsMW';
 import updateProductMW from '../middleware/product/updateProductMW';
 
-import subscribeMW from '../middleware/subscribe/subscribeMW'
+import pushNotificationMW from '../middleware/pushNotifications/pushNotificationMW'
+import subscribeMW from '../middleware/pushNotifications/subscribeMW'
 
 import checkUserDataMW from '../middleware/user/checkUserDataMW';
 import deleteUserMW from '../middleware/user/deleteUserMW';
@@ -81,7 +82,7 @@ export default function(app: express.Application) {
     );
 
     app.get(
-        '/api/cart/:userID',
+        '/api/cart/:userId',
         authMW(objRepo),
         getCurrenciesMW(objRepo),
         getCartMW(objRepo)
@@ -94,14 +95,13 @@ export default function(app: express.Application) {
     );
 
     app.put(
-        '/api/cart/:userID',
+        '/api/cart/:userId',
         authMW(objRepo),
         updateCartMW(objRepo)
     );
 
     app.get(
         '/api/currencies',
-        authMW(objRepo),
         getCurrenciesMW(objRepo),
         getAcceptedCurrenciesMW(objRepo)
     );
@@ -191,20 +191,20 @@ export default function(app: express.Application) {
     );
 
     app.get(
-        '/api/user/:userID',
+        '/api/user/:userId',
         authMW(objRepo),
         getUserMW(objRepo)
     );
 
     app.put(
-        '/api/user/:userID',
+        '/api/user/:userId',
         authMW(objRepo),
         checkUserDataMW(objRepo),
         updateUserMW(objRepo)
     );
 
     app.delete(
-        '/api/user/:userID',
+        '/api/user/:userId',
         authMW(objRepo),
         deleteUserMW(objRepo)
     );
@@ -231,6 +231,11 @@ export default function(app: express.Application) {
         '/api/subscribe',
         authMW(objRepo),
         subscribeMW(objRepo)
+    );
+
+    app.get(
+        '/api/push',
+        pushNotificationMW(objRepo)
     );
 
 }

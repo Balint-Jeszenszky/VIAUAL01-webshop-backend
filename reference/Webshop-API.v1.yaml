@@ -126,11 +126,11 @@ paths:
       security:
         - JWT: []
       description: Delete a product by the admin
-  '/user/{userID}':
+  '/user/{userId}':
     parameters:
       - schema:
           type: string
-        name: userID
+        name: userId
         in: path
         required: true
     get:
@@ -144,7 +144,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      operationId: get-user-userID
+      operationId: get-user-userId
       security:
         - JWT: []
       description: Get the current user's data
@@ -154,7 +154,7 @@ paths:
       responses:
         '204':
           description: No Content
-      operationId: put-user-userID
+      operationId: put-user-userId
       requestBody:
         content:
           application/json:
@@ -169,15 +169,15 @@ paths:
       responses:
         '204':
           description: No Content
-      operationId: delete-user-userID
+      operationId: delete-user-userId
       security:
         - JWT: []
       description: Delete user account
-  '/cart/{userID}':
+  '/cart/{userId}':
     parameters:
       - schema:
           type: string
-        name: userID
+        name: userId
         in: path
         required: true
     get:
@@ -191,7 +191,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-      operationId: get-cart-userID
+      operationId: get-cart-userId
       security:
         - JWT: []
       description: Get the cart content in a list
@@ -202,7 +202,7 @@ paths:
       responses:
         '204':
           description: No Content
-      operationId: put-cart-userID
+      operationId: put-cart-userId
       security:
         - JWT: []
       requestBody:
@@ -217,7 +217,7 @@ paths:
         - cart
     post:
       summary: ''
-      operationId: post-cart-userID
+      operationId: post-cart-userId
       responses:
         '201':
           description: Created
@@ -293,7 +293,7 @@ paths:
             schema:
               type: object
               properties:
-                userID:
+                userId:
                   type: string
       description: User subscription for push notifications
   '/delivery/{companyID}':
@@ -445,7 +445,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Order'
-      operationId: get-orders-userID
+      operationId: get-orders-userId
       description: Get all orders for admin
       security:
         - JWT: []

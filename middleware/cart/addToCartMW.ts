@@ -1,6 +1,6 @@
 /**
  * add product to the users basket
- * userID is on req.params
+ * userId is on req.params
  * new item is on req.body
  */
 

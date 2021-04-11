@@ -1,6 +1,6 @@
 /**
  * updates the users basket
- * userID is on req.params
+ * userId is on req.params
  * updated cart is on req.body
  */
 
@@ -29,7 +29,7 @@ export default function(objRepo: ObjectRepository) {
         const cart: ListItem[] = req.body.filter((e: ListItem) => e.amount > 0);
 
         try {
-            const user = await UserModel.findById(req.params.userID);
+            const user = await UserModel.findById(req.params.userId);
             if (!user) {
                 return res.sendStatus(400);
             }

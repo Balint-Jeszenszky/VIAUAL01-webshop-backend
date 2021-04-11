@@ -1,5 +1,6 @@
 import { Schema, Document } from 'mongoose';
 import db from '../config/db';
+import { PushSubscription } from 'web-push';
 
 type Order = {
     id: string,
@@ -20,7 +21,8 @@ export interface IUser extends Document {
     password: string,
     orders: Order[],
     cart: ListItem[],
-    refreshToken: string | null
+    refreshToken: string | null,
+    pushSubscription?: PushSubscription
 }
 
 export function toUserDTO(user: IUser) {
@@ -44,7 +46,8 @@ const UserSchema: Schema = new Schema({
     password: { type: String, required: true },
     orders: { type: Array },
     cart: { type: Array },
-    refreshToken: { type: String }
+    refreshToken: { type: String },
+    pushSubscription: { type: Object }
 });
 
 export default db.model<IUser>('User', UserSchema);

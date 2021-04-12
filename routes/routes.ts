@@ -149,7 +149,7 @@ export default function(app: express.Application) {
     );
 
     app.post(
-        '/api/order/:userId',
+        '/api/order/new/:userId',
         authMW(objRepo),
         createOrder(objRepo)
     );
@@ -157,7 +157,8 @@ export default function(app: express.Application) {
     app.put(
         '/api/order/:orderID',
         authMW(objRepo),
-        updateOrderMW(objRepo)
+        updateOrderMW(objRepo),
+        pushNotificationMW(objRepo)
     );
 
     app.get(
@@ -232,10 +233,4 @@ export default function(app: express.Application) {
         authMW(objRepo),
         subscribeMW(objRepo)
     );
-
-    app.get(
-        '/api/push',
-        pushNotificationMW(objRepo)
-    );
-
 }

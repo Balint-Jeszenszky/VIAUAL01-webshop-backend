@@ -22,7 +22,8 @@ export interface IUser extends Document {
     orders: Order[],
     cart: ListItem[],
     refreshToken: string | null,
-    pushSubscription?: PushSubscription
+    pushSubscription?: PushSubscription,
+    role: 'ADMIN' | 'USER'
 }
 
 export function toUserDTO(user: IUser) {
@@ -33,7 +34,8 @@ export function toUserDTO(user: IUser) {
         email: user.email,
         address: user.address,
         phoneNumber: user.phoneNumber,
-        orders: user.orders
+        orders: user.orders,
+        role: user.role
     };
 }
 
@@ -47,7 +49,8 @@ const UserSchema: Schema = new Schema({
     orders: { type: Array },
     cart: { type: Array },
     refreshToken: { type: String },
-    pushSubscription: { type: Object }
+    pushSubscription: { type: Object },
+    role: { type: String }
 });
 
 export default db.model<IUser>('User', UserSchema);

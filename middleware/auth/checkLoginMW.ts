@@ -34,13 +34,13 @@ export default function(objRepo: ObjectRepository) {
             if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
                 return res.sendStatus(403);
             }
-            user.refreshToken = jwt.sign({userId: user._id}, refreshTokenSecret, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || '4h' });
+            user.refreshToken = jwt.sign({userId: user._id, role: user.role}, refreshTokenSecret, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || '4h' });
             await user.save();
         } catch (e) {
             return next(e);
         }
 
-        const accessToken = jwt.sign({userId: user._id}, accessTokenSecret, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION || '10m' });
+        const accessToken = jwt.sign({userId: user._id, role: user.role}, accessTokenSecret, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION || '10m' });
 
         return res.json({accessToken, refreshToken: user.refreshToken});
     };

@@ -5,6 +5,7 @@ import fs from 'fs';
 import morgan from 'morgan';
 import path from 'path';
 import externalServices from './externalServices/externalServices';
+import createAdmin from './services/createAdmin';
 import dotenv from 'dotenv';
 import cors from 'cors'; // remove in production code
 
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV === 'DEVELOPMENT') { // remove in production code
 }
 
 externalServices();
+createAdmin();
 routes(app);
 
 app.use((err: express.ErrorRequestHandler, req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -22,7 +22,6 @@ export default function (objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         const refreshToken = req.body.refreshToken;
-        console.log(refreshToken)
         if (refreshToken === undefined) return res.sendStatus(401);
 
         try {
@@ -31,8 +30,8 @@ export default function (objRepo: ObjectRepository) {
 
             if (!user || user.refreshToken !== refreshToken) return res.sendStatus(401);
 
-            const accessToken = jwt.sign({userId: user._id}, accessTokenSecret, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION || '10m' });
-            user.refreshToken = jwt.sign({userId: user._id}, refreshTokenSecret, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || '4h' });
+            const accessToken = jwt.sign({userId: user._id, role: user.role}, accessTokenSecret, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION || '10m' });
+            user.refreshToken = jwt.sign({userId: user._id, role: user.role}, refreshTokenSecret, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || '4h' });
             await user.save();
             return res.json({ accessToken, refreshToken: user.refreshToken });
         } catch (e) {

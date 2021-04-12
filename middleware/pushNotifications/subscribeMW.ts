@@ -13,7 +13,7 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await UserModel.findById(res.locals.user.userId);
+            const user = await UserModel.findById(res.locals.userId);
             if (user) {
                 user.pushSubscription = req.body;
                 await user.save();

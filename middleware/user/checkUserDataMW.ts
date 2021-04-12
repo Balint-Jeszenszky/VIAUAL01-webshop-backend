@@ -31,7 +31,6 @@ export default function(objRepo: ObjectRepository) {
         try {
             const user = await UserModel.findOne({ email: req.body.email });
             if (user && user._id != req.params.userId) {
-                console.log(typeof user._id)
                 errors.push('email_reg');
             }
         } catch (e) {

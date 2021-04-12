@@ -30,6 +30,7 @@ export default function(objRepo: ObjectRepository) {
         newUser.address = '';
         newUser.orders = [];
         newUser.cart = [];
+        newUser.role = 'USER';
 
         try {
             await newUser.save();

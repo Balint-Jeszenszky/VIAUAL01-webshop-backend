@@ -13,7 +13,7 @@ export default function(objRepo: ObjectRepository) {
     const OrderModel: Model<IOrder> = requireOption(objRepo, 'Order');
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        if (res.locals.userId === 'ADMIN') {
+        if (res.locals.userRole === 'ADMIN') {
             try {
                 const orders = await OrderModel.find({});
                 res.json(orders.map(e => toOrderDTO(e)));

@@ -1,5 +1,6 @@
 /**
- * send notification
+ * send notification to user
+ * orderId set on res.locals.orderId
  */
 
 import { Request, Response, NextFunction } from 'express';
@@ -17,15 +18,31 @@ export default function (objRepo: ObjectRepository) {
         throw new TypeError('no vapid key');
     }
 
-    webPush.setVapidDetails('mailto:admin@localhost', publicVapidKey, privateVapidKey);
+    webPush.setVapidDetails(`mailto:${process.env.ADMIN_EMAIL}`, publicVapidKey, privateVapidKey);
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await UserModel.findOne({});
+            if (res.locals.orderId) {
+                const user = await UserModel.findById(
+                    await UserModel.aggregate([
+                        {
+                            $unwind: '$orders'
+                        },
+                        {
+                            $match: {
+                                'orders.id': res.locals.orderId
+                            }
+                        },
+                        {
+                            $project: { _id: 1 }
+                        }
+                    ])
+                );
 
-            const payload = JSON.stringify({ title: 'push test', body: 'it works!' });
+                const payload = JSON.stringify({ title: 'Delivery update', body: 'Your order is under delivery\nYou can see it in your orders' });
 
-            await webPush.sendNotification(user!.pushSubscription!, payload);
+                await webPush.sendNotification(user!.pushSubscription!, payload);
+            }
 
             return res.sendStatus(204);
         } catch (e) {

@@ -16,9 +16,9 @@ export default function (objRepo: ObjectRepository) {
     const privateVapidKey = process.env.VAPID_PRIVATE_KEY || '';
     if ((!publicVapidKey || !privateVapidKey) && process.env.NODE_ENV !== 'test') {
         throw new TypeError('no vapid key');
+    } else if (process.env.NODE_ENV !== 'test') {
+        webPush.setVapidDetails(`mailto:${process.env.ADMIN_EMAIL}`, publicVapidKey, privateVapidKey);
     }
-
-    webPush.setVapidDetails(`mailto:${process.env.ADMIN_EMAIL}`, publicVapidKey, privateVapidKey);
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {

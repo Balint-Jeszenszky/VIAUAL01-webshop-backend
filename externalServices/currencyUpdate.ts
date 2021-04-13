@@ -2,7 +2,7 @@ import { ICurrency } from '../models/Currency';
 import { Model } from 'mongoose';
 import requireOption from '../middleware/generic/requireOption';
 import ObjectRepository from '../models/ObjectRepository';
-import axios from 'axios';
+import getAvailableCurrencies from './getAvailableCurrencies';
 
 export default function(objRepo: ObjectRepository) {
     const CurrencyModel: Model<ICurrency> = requireOption(objRepo, 'Currency');
@@ -13,20 +13,12 @@ export default function(objRepo: ObjectRepository) {
     }
 
     return async function() {
-        const response = await axios.get(`http://api.exchangeratesapi.io/v1/latest?access_key=${apiKey}`);
+        const rebased = await getAvailableCurrencies(base!, apiKey!);
 
         const currencies = await CurrencyModel.find({});
 
-        const basePrice = response.data.rates[base!];
-
-        const rebased: {[key: string]: number} = {};
-
-        Object.entries(response.data.rates).forEach(e => {
-            rebased[e[0]] = (e[1] as number) / basePrice;
-        });
-
         for (const c of currencies) {
-            c.price = (1 + c.charge) * rebased[c.name];
+            c.price = rebased[c.name];
             await c.save();
         }
     }

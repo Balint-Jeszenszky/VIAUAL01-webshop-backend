@@ -296,7 +296,7 @@ paths:
                 userID:
                   type: string
       description: User subscription for push notifications
-  '/delivery/{companyID}':
+  /delivery:
     put:
       summary: Delivery informationupdate
       tags:
@@ -311,12 +311,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DeliveryInfo'
       description: Delivery info update by delivery company
-    parameters:
-      - schema:
-          type: string
-        name: companyID
-        in: path
-        required: true
+    parameters: []
   '/products/search/{query}/page/{page}':
     get:
       summary: ''
@@ -385,7 +380,8 @@ paths:
   /currencies:
     get:
       summary: Get list of accepted currencies
-      tags: []
+      tags:
+        - currency
       responses:
         '200':
           description: OK
@@ -397,23 +393,22 @@ paths:
                   type: string
       operationId: get-currencies
       description: Get a list of accepted currencies
-    put:
-      summary: Edit accepted currencies
-      tags: []
+    post:
+      summary: ''
+      operationId: post-currencies
       responses:
-        '204':
-          description: No Content
-      operationId: put-currencies
+        '201':
+          description: Created
+      description: add new currency
       security:
         - JWT: []
-      description: 'Edit accepted currencies and '
       requestBody:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Currency'
+              $ref: '#/components/schemas/Currency'
+      tags:
+        - currency
   /categories:
     get:
       summary: get a list of categories
@@ -572,6 +567,40 @@ paths:
       description: 'logout, remove refresh oken'
       security:
         - JWT: []
+  '/currencies/{currencyId}':
+    parameters:
+      - schema:
+          type: string
+        name: currencyId
+        in: path
+        required: true
+    put:
+      summary: edit currency data
+      tags:
+        - currency
+      responses:
+        '204':
+          description: No Content
+      operationId: put-currencies-currencyId
+      description: edit currecy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+    delete:
+      summary: delete currency
+      tags:
+        - currency
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+      operationId: delete-currencies-currencyId
+      description: delete currency
+      security:
+        - JWT: []
 components:
   schemas:
     Product:
@@ -630,7 +659,7 @@ components:
         accessToken:
           type: string
         position:
-          type: string
+          type: object
     Order:
       title: Order
       type: object
@@ -686,6 +715,7 @@ components:
 tags:
   - name: auth
   - name: cart
+  - name: currency
   - name: delivery
   - name: product
   - name: user

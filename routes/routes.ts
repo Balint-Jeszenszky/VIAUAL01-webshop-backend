@@ -1,5 +1,7 @@
 import express from 'express';
+import cors from 'cors';
 
+import adminAccessMW from '../middleware/auth/adminAccessMW';
 import authMW from '../middleware/auth/authMW';
 import checkLoginMW from '../middleware/auth/checkLoginMW';
 import checkRegMW from '../middleware/auth/checkRegMW';
@@ -16,10 +18,16 @@ import deleteCategoryMW from '../middleware/category/deleteCategoryMW';
 import editCategoryMW from '../middleware/category/editCategoryMW';
 import getCategoriesMW from '../middleware/category/getCategoriesMW';
 
+import addCurrencyMW from '../middleware/currency/addCurrencyMW';
+import deleteCurrencyMW from '../middleware/currency/deleteCurrencyMW';
 import getAcceptedCurrenciesMW from '../middleware/currency/getAcceptedCurrenciesMW';
+import getAllCurrenciesMW from '../middleware/currency/getAllCurrenciesMW';
+import getAllowedCurrenciesMW from '../middleware/currency/getAllowedCurrenciesMW';
 import getCurrenciesMW from '../middleware/currency/getCurrenciesMW';
+import loadAllCurrenciesMW from '../middleware/currency/loadAllCurrenciesMW';
 import updateCurrenciesMW from '../middleware/currency/updateCurrenciesMW';
 
+import createAccessTokenMW from '../middleware/delivery/createAccessTokenMW'
 import updateDeliveryMW from '../middleware/delivery/updateDeliveryMW'
 
 import createOrder from '../middleware/order/createOrderMW';
@@ -106,10 +114,45 @@ export default function(app: express.Application) {
         getAcceptedCurrenciesMW(objRepo)
     );
 
-    app.put(
+    app.get(
+        '/api/currencies/allowed',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        getCurrenciesMW(objRepo),
+        getAllowedCurrenciesMW(objRepo)
+    );
+
+    app.get(
+        '/api/currencies/all',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        getCurrenciesMW(objRepo),
+        loadAllCurrenciesMW(objRepo),
+        getAllCurrenciesMW(objRepo)
+    );
+
+    app.post(
         '/api/currencies',
         authMW(objRepo),
+        adminAccessMW(objRepo),
+        getCurrenciesMW(objRepo),
+        loadAllCurrenciesMW(objRepo),
+        addCurrencyMW(objRepo)
+    );
+
+    app.put(
+        '/api/currencies/:currencyId',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
         updateCurrenciesMW(objRepo)
+    );
+
+    app.delete(
+        '/api/currencies/:currencyId',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        getCurrenciesMW(objRepo),
+        deleteCurrencyMW(objRepo)
     );
 
     app.get(
@@ -120,24 +163,34 @@ export default function(app: express.Application) {
     app.post(
         '/api/category',
         authMW(objRepo),
+        adminAccessMW(objRepo),
         createCategoryMW(objRepo)
     );
     
     app.put(
         '/api/category/:categoryId',
         authMW(objRepo),
+        adminAccessMW(objRepo),
         editCategoryMW(objRepo)
     );
     
     app.delete(
         '/api/category/:categoryId',
         authMW(objRepo),
+        adminAccessMW(objRepo),
         deleteCategoryMW(objRepo)
     );
 
-    app.put(
-        '/api/delivery/:companyID',
+    app.get(
+        '/api/delivery',
         authMW(objRepo),
+        adminAccessMW(objRepo),
+        createAccessTokenMW(objRepo)
+    );
+
+    app.put(
+        '/api/delivery',
+        cors(),
         updateDeliveryMW(objRepo)
     );
 
@@ -164,6 +217,7 @@ export default function(app: express.Application) {
     app.get(
         '/api/orders',
         authMW(objRepo),
+        adminAccessMW(objRepo),
         getOrdersMW(objRepo)
     );
 
@@ -176,18 +230,21 @@ export default function(app: express.Application) {
     app.post(
         '/api/product',
         authMW(objRepo),
+        adminAccessMW(objRepo),
         saveProductMW(objRepo)
     );
 
     app.put(
         '/api/product/:productID',
-       authMW(objRepo),
-       updateProductMW(objRepo)
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        updateProductMW(objRepo)
     );
 
     app.delete(
         '/api/product/:productID',
         authMW(objRepo),
+        adminAccessMW(objRepo),
         deleteProductMW(objRepo)
     );
 

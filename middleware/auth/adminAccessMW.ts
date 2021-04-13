@@ -1,13 +1,16 @@
 /**
- * get the accepted currencies
+ * restricts access to admin only
  */
 
 import { Request, Response, NextFunction } from 'express';
 import ObjectRepository from '../../models/ObjectRepository';
-import { ICurrency } from '../../models/Currency';
 
 export default function (objRepo: ObjectRepository) {
+
     return async function (req: Request, res: Response, next: NextFunction) {
-        return res.json([process.env.DEFAULT_CURRENCY, ...res.locals.currencies.map((e: ICurrency) => e.name)]);
+        if (res.locals.userRole !== 'ADMIN') {
+            return res.sendStatus(403);
+        }
+        return next();
     };
 }

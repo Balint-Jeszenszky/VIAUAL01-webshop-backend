@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import multer, { MulterError } from 'multer';
+import path from 'path';
 
 import adminAccessMW from '../middleware/auth/adminAccessMW';
 import authMW from '../middleware/auth/authMW';
@@ -36,6 +38,7 @@ import getOrdersMW from '../middleware/order/getOrdersMW';
 import updateOrderMW from '../middleware/order/updateOrderMW';
 
 import deleteProductMW from '../middleware/product/deleteProductMW';
+import getAllProductsMW from '../middleware/product/getAllProductsMW';
 import getProductMW from '../middleware/product/getProductMW';
 import getProductsMW from '../middleware/product/getProductsMW';
 import getRecommendedProductsMW from '../middleware/product/getRecommendedProductsMW';
@@ -59,6 +62,28 @@ import Order from '../models/Order';
 import Currency from '../models/Currency';
 
 export default function(app: express.Application) {
+    const storage = multer.diskStorage({
+        destination: 'static/images',
+        filename: (req, file, cb) => {
+            const name = file.originalname;
+            const ext = path.extname(name);
+            cb(null, `${name.substr(0, name.length - 4).split(' ').join('_')}_${Date.now()}_${Math.random().toString(36).substring(2,6)}${ext}`);
+        }
+    });
+
+    const upload = multer({
+        storage,
+        limits: {
+            fileSize: 1024*1024
+        },
+        fileFilter: (req, file, cb) => {
+            const name = file.originalname;
+            const ext = path.extname(name);
+            const fileTypes = /jpeg|jpg|png|gif/;
+            const valid = fileTypes.test(ext.toLowerCase()) && fileTypes.test(file.mimetype);
+            cb(null, valid);
+        }
+    }).single('productImage');
 
     const objRepo: ObjectRepository = {
         Product,
@@ -231,6 +256,7 @@ export default function(app: express.Application) {
         '/api/product',
         authMW(objRepo),
         adminAccessMW(objRepo),
+        upload,
         saveProductMW(objRepo)
     );
 
@@ -238,6 +264,7 @@ export default function(app: express.Application) {
         '/api/product/:productID',
         authMW(objRepo),
         adminAccessMW(objRepo),
+        upload,
         updateProductMW(objRepo)
     );
 
@@ -277,6 +304,13 @@ export default function(app: express.Application) {
         '/api/products',
         getCurrenciesMW(objRepo),
         getRecommendedProductsMW(objRepo)
+    );
+
+    app.get(
+        '/api/products/all',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        getAllProductsMW(objRepo)
     );
 
     app.get(

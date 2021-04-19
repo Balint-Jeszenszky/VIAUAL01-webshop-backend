@@ -22,7 +22,7 @@ app.use(express.json());
 
 if (process.env.NODE_ENV === 'DEVELOPMENT') { // remove in production code
     app.use(cors()); // for separate client development
-    app.use((req, res, next) => setTimeout(next, 200)); // artificial latency
+    //app.use((req, res, next) => setTimeout(next, 200)); // artificial latency
     //app.use(morgan('combined'));
 }
 

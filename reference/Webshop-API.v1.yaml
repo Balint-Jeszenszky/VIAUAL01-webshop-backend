@@ -87,6 +87,13 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
       operationId: post-product-productID
       security:
         - JWT: []
@@ -601,6 +608,29 @@ paths:
       description: delete currency
       security:
         - JWT: []
+  /products/all:
+    get:
+      summary: get all products id and name
+      tags:
+        - product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+        '403':
+          description: Forbidden
+      operationId: get-products-all
+      security:
+        - JWT: []
+      description: get all product name and id
 components:
   schemas:
     Product:

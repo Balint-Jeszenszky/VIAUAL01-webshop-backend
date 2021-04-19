@@ -23,7 +23,8 @@ export function toProductDTO(product: IProduct, currencies: ICurrency[]) {
         imageURL: product.imageURL,
         categoryID: product.categoryID,
         price: price,
-        stock: product.stock
+        stock: product.stock,
+        recommended: product.recommended
     };
 }
 

@@ -1,6 +1,7 @@
 /**
  * save a new product
  * details on req.body
+ * image on req.file
  */
 
 import { Request, Response, NextFunction } from 'express';
@@ -16,19 +17,28 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         if (req.body.name === undefined ||
+            req.body.name === '' ||
             req.body.description === undefined ||
+            req.body.description === '' ||
             req.body.categoryID === undefined ||
             req.body.price === undefined ||
             req.body.stock === undefined ||
-            req.body.recommended === undefined
+            req.body.recommended === undefined ||
+            req.file === undefined
         ) {
             return res.sendStatus(400);
         }
 
+        // request object is FormData type because the picture
+        // convert back to native type
+        req.body.price = parseFloat(req.body.price);
+        req.body.stock = parseInt(req.body.stock);
+        req.body.recommended = req.body.recommended === 'true';
+
         const product = new ProductModel();
         product.name = req.body.name;
         product.description = req.body.description;
-        product.imageURL = req.body.imageURL;
+        product.imageURL = req.file.filename;
         product.categoryID = req.body.categoryID;
         product.price = req.body.price;
         product.stock = req.body.stock;
@@ -46,7 +56,7 @@ export default function(objRepo: ObjectRepository) {
 
         try {
             await product.save();
-            return res.sendStatus(201);
+            return res.status(201).send({id: product._id});
         } catch (e) {
             return next(e);
         }

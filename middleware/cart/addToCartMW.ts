@@ -43,8 +43,6 @@ export default function (objRepo: ObjectRepository) {
                 user.cart = [...user.cart, {id: req.body.productId, amount: req.body.amount}];
             }
 
-            console.log(user.cart);
-
             await user.save();
             return res.sendStatus(201);
         } catch (e) {

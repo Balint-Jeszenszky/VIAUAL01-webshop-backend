@@ -16,7 +16,7 @@ const app = express();
 const accessLogStream = fs.createWriteStream(path.join(__dirname, process.env.LOG_FILE || 'access.log'), { flags: 'a' })
 
 app.use(morgan('combined', { stream: accessLogStream }));
-app.use(helmet());
+//app.use(helmet());
 app.use(express.static('static'));
 app.use(express.json());
 

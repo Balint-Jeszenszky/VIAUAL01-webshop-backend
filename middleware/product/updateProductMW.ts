@@ -16,7 +16,6 @@ export default function(objRepo: ObjectRepository) {
     const CategoryModel: Model<ICategory> = requireOption(objRepo, 'Category');
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        console.log(req.file);
         if (req.body.name === undefined ||
             req.body.name === '' ||
             req.body.description === undefined ||

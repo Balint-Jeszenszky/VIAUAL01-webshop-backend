@@ -29,7 +29,10 @@ import getCurrenciesMW from '../middleware/currency/getCurrenciesMW';
 import loadAllCurrenciesMW from '../middleware/currency/loadAllCurrenciesMW';
 import updateCurrenciesMW from '../middleware/currency/updateCurrenciesMW';
 
-import createAccessTokenMW from '../middleware/delivery/createAccessTokenMW'
+import createNewAccessTokenMW from '../middleware/delivery/createNewAccessTokenMW'
+import createCompanyMW from '../middleware/delivery/createCompanyMW'
+import deleteCompanyMW from '../middleware/delivery/deleteCompanyMW'
+import getCompaniesMW from '../middleware/delivery/getCompaniesMW'
 import updateDeliveryMW from '../middleware/delivery/updateDeliveryMW'
 
 import createOrder from '../middleware/order/createOrderMW';
@@ -60,6 +63,7 @@ import Category from '../models/Category';
 import User from '../models/User';
 import Order from '../models/Order';
 import Currency from '../models/Currency';
+import Company from '../models/Company';
 
 export default function(app: express.Application) {
     const storage = multer.diskStorage({
@@ -90,7 +94,8 @@ export default function(app: express.Application) {
         Category,
         User,
         Order,
-        Currency
+        Currency,
+        Company
     }
 
     app.post(
@@ -210,13 +215,34 @@ export default function(app: express.Application) {
         '/api/delivery',
         authMW(objRepo),
         adminAccessMW(objRepo),
-        createAccessTokenMW(objRepo)
+        getCompaniesMW(objRepo)
+    );
+
+    app.post(
+        '/api/delivery',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        createCompanyMW(objRepo)
     );
 
     app.put(
         '/api/delivery',
         cors(),
         updateDeliveryMW(objRepo)
+    );
+
+    app.patch(
+        '/api/delivery/:companyId',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        createNewAccessTokenMW(objRepo)
+    );
+
+    app.delete(
+        '/api/delivery/:companyId',
+        authMW(objRepo),
+        adminAccessMW(objRepo),
+        deleteCompanyMW(objRepo)
     );
 
     app.get(

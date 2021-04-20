@@ -25,22 +25,11 @@ export default function(objRepo: ObjectRepository) {
                 }
                 order.paid = true;
                 await order.save();
-                const user = await UserModel.findById(await UserModel.aggregate([
-                    {
-                        $unwind: '$orders'
-                    },
-                    {
-                        $match: {
-                            'orders.id': order._id
-                        }
-                    },
-                    {
-                        $project: { _id: 1 }
-                    }
-                ]));
+                const user = await UserModel.findById(order.customer.userId);
                 if (!user) {
                     return res.sendStatus(400);
                 }
+                user.orders.push({id: order._id, date: order.date});
                 user.cart = [];
                 await user.save();
             }

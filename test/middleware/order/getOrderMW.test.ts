@@ -19,6 +19,13 @@ describe('getOrder middleware', () => {
         product.description = 'bar';
         product.price = 89;
         await product.save();
+        const user = new User();
+        user.name = 'asd';
+        user.username = 'asd';
+        user.email = 'asd';
+        user.password = 'asd';
+        user.refreshToken = 'asd';
+        await user.save();
         const order = new Order();
         order.date = new Date();
         order.products = [{id: product._id, amount: 3}];
@@ -27,17 +34,11 @@ describe('getOrder middleware', () => {
             name: 'asd',
             address: 'asd',
             email: 'asdas@asd.asd',
-            phoneNumber: '+36201234567'
+            phoneNumber: '+36201234567',
+            userId: user._id
         }
         await order.save();
         id = order._id;
-        const user = new User();
-        user.name = 'asd';
-        user.username = 'asd';
-        user.email = 'asd';
-        user.password = 'asd';
-        user.refreshToken = 'asd';
-        await user.save();
         token = jwt.sign({userId: user._id}, process.env.ACCESS_TOKEN_SECRET || 'test');
     });
 

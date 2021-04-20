@@ -15,7 +15,8 @@ type Customer = {
     name: string,
     email: string,
     address: string,
-    phoneNumber: string
+    phoneNumber: string,
+    userId: string
 }
 
 export interface IOrder extends Document {

@@ -24,9 +24,8 @@ export default function (objRepo: ObjectRepository) {
             order.products = user.cart;
             order.paid = false;
             order.customer = res.locals.customer;
+            order.customer.userId = user._id;
             await order.save();
-            user.orders.push({id: order._id, date: order.date});
-            await user.save();
 
             res.locals.order = order;
             return next();

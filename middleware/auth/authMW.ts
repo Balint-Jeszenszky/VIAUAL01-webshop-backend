@@ -28,7 +28,7 @@ export default function(objRepo: ObjectRepository) {
             const data = jwt.verify(token, accessTokenSecret) as {userId: string};
             const user = await UserModel.findById(data.userId);
             if (!user || user.refreshToken === null) return res.sendStatus(403);
-            res.locals.userId = user._id;
+            res.locals.userId = user._id.toString();
             res.locals.userRole = user.role;
             return next();
         } catch (e) {

@@ -1,6 +1,6 @@
 import express from 'express';
-import cors from 'cors';
-import multer, { MulterError } from 'multer';
+import cors, { CorsOptionsDelegate, CorsOptions } from 'cors';
+import multer from 'multer';
 import path from 'path';
 
 import adminAccessMW from '../middleware/auth/adminAccessMW';
@@ -35,10 +35,14 @@ import deleteCompanyMW from '../middleware/delivery/deleteCompanyMW'
 import getCompaniesMW from '../middleware/delivery/getCompaniesMW'
 import updateDeliveryMW from '../middleware/delivery/updateDeliveryMW'
 
-import createOrder from '../middleware/order/createOrderMW';
+import checkCustomerDetailsMW from '../middleware/order/checkCustomerDetailsMW';
 import getOrderMW from '../middleware/order/getOrderMW';
 import getOrdersMW from '../middleware/order/getOrdersMW';
+import startOrderMW from '../middleware/order/startOrderMW';
 import updateOrderMW from '../middleware/order/updateOrderMW';
+
+import barionStartPaymentMW from '../middleware/payment/barionStartPaymentMW';
+import barionFinnishPaymentMW from '../middleware/payment/barionFinnishPaymentMW';
 
 import deleteProductMW from '../middleware/product/deleteProductMW';
 import getAllProductsMW from '../middleware/product/getAllProductsMW';
@@ -64,6 +68,8 @@ import User from '../models/User';
 import Order from '../models/Order';
 import Currency from '../models/Currency';
 import Company from '../models/Company';
+import Transaction from '../models/Transaction';
+import createOrderMW from '../middleware/order/createOrderMW';
 
 export default function(app: express.Application) {
     const storage = multer.diskStorage({
@@ -89,13 +95,40 @@ export default function(app: express.Application) {
         }
     }).single('productImage');
 
+    const barionIPs = [
+        '13.79.241.141',
+        '::ffff:13.79.241.141',
+        '40.69.88.149',
+        '::ffff:40.69.88.149',
+        '40.69.88.240',
+        '::ffff:40.69.88.240',
+        '52.164.220.205',
+        '::ffff:52.164.220.205',
+        '52.169.80.55',
+        '::ffff:52.169.80.55'
+    ];
+
+    const barionCorsOptions: CorsOptionsDelegate = (req, callback) => {
+        const corsOptions: CorsOptions = {
+            methods: ["POST"],
+            allowedHeaders: ["Content-Type", "application/json"]
+        };
+        
+        const request = Object.assign({_remoteAddress: 'localhost'}, req);
+        const ipAddress = request._remoteAddress;
+        corsOptions.origin = (ipAddress && barionIPs.indexOf(ipAddress) !== -1);
+
+        callback(null, corsOptions);
+    }
+
     const objRepo: ObjectRepository = {
         Product,
         Category,
         User,
         Order,
         Currency,
-        Company
+        Company,
+        Transaction
     }
 
     app.post(
@@ -255,7 +288,9 @@ export default function(app: express.Application) {
     app.post(
         '/api/order/new/:userId',
         authMW(objRepo),
-        createOrder(objRepo)
+        checkCustomerDetailsMW(objRepo),
+        startOrderMW(objRepo),
+        barionStartPaymentMW(objRepo)
     );
 
     app.put(
@@ -349,5 +384,12 @@ export default function(app: express.Application) {
         '/api/subscribe',
         authMW(objRepo),
         subscribeMW(objRepo)
+    );
+
+    app.post(
+        '/api/barion',
+        cors(barionCorsOptions),
+        barionFinnishPaymentMW(objRepo),
+        createOrderMW(objRepo)
     );
 }

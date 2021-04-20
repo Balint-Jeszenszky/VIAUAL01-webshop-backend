@@ -22,6 +22,13 @@ describe('getOrder middleware', () => {
         const order = new Order();
         order.date = new Date();
         order.products = [{id: product._id, amount: 3}];
+        order.paid = true;
+        order.customer = {
+            name: 'asd',
+            address: 'asd',
+            email: 'asdas@asd.asd',
+            phoneNumber: '+36201234567'
+        }
         await order.save();
         id = order._id;
         const user = new User();

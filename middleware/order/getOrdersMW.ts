@@ -14,7 +14,7 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const orders = await OrderModel.find({});
+            const orders = await OrderModel.find({paid: true});
             res.json(orders.map(e => toOrderDTO(e)));
         } catch(e) {
             next(e);

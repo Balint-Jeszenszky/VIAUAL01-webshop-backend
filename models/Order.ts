@@ -11,9 +11,18 @@ type MapsAPI = {
     coords: { lng: number, lat: number }
 }
 
+type Customer = {
+    name: string,
+    email: string,
+    address: string,
+    phoneNumber: string
+}
+
 export interface IOrder extends Document {
     date: Date,
     products: ListItem[],
+    paid: boolean,
+    customer: Customer,
     mapsAPI: MapsAPI | undefined
 }
 
@@ -33,6 +42,8 @@ export function toOrderDTO(order: IOrder) {
 const OrderSchema: Schema = new Schema({
     date: { type: Date, required: true },
     products: { type: Array, required: true },
+    paid: { type: Boolean, required: true },
+    customer: { type: Object, required: true },
     mapsAPI: { type: Object }
 });
 

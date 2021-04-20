@@ -16,7 +16,7 @@ export default function(objRepo: ObjectRepository) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const order = await OrerModel.findOne({ _id: req.params.orderID });
+            const order = await OrerModel.findOne({ _id: req.params.orderID, paid: true });
             if (order) {
                 const products = [];
                 for (const prod of order.products) {

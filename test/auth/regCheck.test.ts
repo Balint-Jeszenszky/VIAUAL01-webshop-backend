@@ -1,9 +1,10 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import User from '../../../models/User';
-import app from '../../../app';
+import User from '../../models/User';
+import app from '../../app';
 import request from 'supertest';
 
 describe('POST new user', () => {
@@ -14,6 +15,10 @@ describe('POST new user', () => {
         user.email = 'example@example.org';
         user.password = 'pass';
         await user.save();
+    });
+
+    after(async () => {
+        await User.deleteMany({});
     });
 
     it('should response username already registered error', (done: Done) => {

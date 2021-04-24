@@ -9,7 +9,7 @@ import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
 import { Model } from 'mongoose';
 import { IProduct } from '../../models/Product';
-import { IUser, ListItem } from '../../models/User';
+import { IUser } from '../../models/User';
 
 export default function (objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');

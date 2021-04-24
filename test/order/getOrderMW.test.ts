@@ -1,12 +1,13 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import Order from '../../../models/Order';
-import app from '../../../app';
+import Order from '../../models/Order';
+import app from '../../app';
 import request from 'supertest';
-import Product from '../../../models/Product';
-import User from '../../../models/User';
+import Product from '../../models/Product';
+import User from '../../models/User';
 import jwt from 'jsonwebtoken';
 
 describe('getOrder middleware', () => {

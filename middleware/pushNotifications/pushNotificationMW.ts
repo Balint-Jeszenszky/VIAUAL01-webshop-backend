@@ -12,11 +12,12 @@ import webPush from 'web-push';
 
 export default function (objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
-    const publicVapidKey = process.env.VAPID_PUBLIC_KEY || '';
-    const privateVapidKey = process.env.VAPID_PRIVATE_KEY || '';
-    if ((!publicVapidKey || !privateVapidKey) && process.env.NODE_ENV !== 'test') {
+    const publicVapidKey = process.env.VAPID_PUBLIC_KEY;
+    const privateVapidKey = process.env.VAPID_PRIVATE_KEY;
+    if (!publicVapidKey || !privateVapidKey) {
         throw new TypeError('no vapid key');
-    } else if (process.env.NODE_ENV !== 'test') {
+    }
+    if (process.env.NODE_ENV !== 'TEST') {
         webPush.setVapidDetails(`mailto:${process.env.ADMIN_EMAIL}`, publicVapidKey, privateVapidKey);
     }
 

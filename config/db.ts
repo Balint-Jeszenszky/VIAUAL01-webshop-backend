@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'TEST') {
     const mongoServer = new MongoMemoryServer();
     mongoServer.getUri().then((mongoUri) => {
         mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });

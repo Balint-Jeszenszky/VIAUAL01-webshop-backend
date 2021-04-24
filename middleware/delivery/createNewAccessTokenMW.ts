@@ -12,7 +12,7 @@ import requireOption from '../generic/requireOption';
 export default function (objRepo: ObjectRepository) {
     const CompanyModel: Model<ICompany> = requireOption(objRepo, 'Company');
     const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-    if (!accessTokenSecret && process.env.NODE_ENV !== 'test') {
+    if (!accessTokenSecret) {
         throw new TypeError('ACCESS_TOKEN_SECRET undefined');
     }
 

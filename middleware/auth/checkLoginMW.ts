@@ -13,12 +13,12 @@ import jwt from 'jsonwebtoken';
 
 export default function(objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
-    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || 'test';
-    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || 'test';
-    if (accessTokenSecret === 'test' && process.env.NODE_ENV !== 'test') {
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+    const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+    if (!accessTokenSecret) {
         throw new TypeError('ACCESS_TOKEN_SECRET not set in .env');
     }
-    if (refreshTokenSecret === 'test' && process.env.NODE_ENV !== 'test') {
+    if (!refreshTokenSecret) {
         throw new TypeError('REFRESH_TOKEN_SECRET not set in .env');
     }
 

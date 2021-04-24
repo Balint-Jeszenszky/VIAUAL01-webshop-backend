@@ -7,7 +7,7 @@ import ObjectRepository from '../../models/ObjectRepository';
 
 export default function (objRepo: ObjectRepository) {
 
-    return async function (req: Request, res: Response, next: NextFunction) {
+    return function (req: Request, res: Response, next: NextFunction) {
         if (res.locals.userRole !== 'ADMIN') {
             return res.sendStatus(403);
         }

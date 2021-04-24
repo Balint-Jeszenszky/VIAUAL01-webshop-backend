@@ -1,9 +1,10 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import User from '../../../models/User';
-import app from '../../../app';
+import User from '../../models/User';
+import app from '../../app';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 
@@ -23,7 +24,7 @@ describe('getUser middleware', () => {
     });
 
     after(async () => {
-        User.deleteMany({});
+        await User.deleteMany({});
     });
 
     it('should response with a user', (done: Done) => {

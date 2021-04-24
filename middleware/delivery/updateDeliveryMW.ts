@@ -14,8 +14,8 @@ import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 export default function(objRepo: ObjectRepository) {
     const OrderModel: Model<IOrder> = requireOption(objRepo, 'Order');
     const CompanyModel: Model<ICompany> = requireOption(objRepo, 'Company');
-    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || '';
-    if (!accessTokenSecret && process.env.NODE_ENV !== 'test') {
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+    if (!accessTokenSecret) {
         throw new TypeError('ACCESS_TOKEN_SECRET undefined');
     }
 

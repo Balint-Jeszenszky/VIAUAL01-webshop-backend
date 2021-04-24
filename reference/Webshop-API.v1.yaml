@@ -17,6 +17,8 @@ paths:
         '201':
           description: Created
           headers: {}
+        '400':
+          description: Bad Request
         '409':
           description: Conflict
       operationId: post-auth-register
@@ -46,6 +48,8 @@ paths:
       responses:
         '200':
           description: OK
+        '400':
+          description: Bad Request
         '403':
           description: Forbidden
       operationId: post-auth-login
@@ -198,6 +202,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
       operationId: get-cart-userID
       security:
         - JWT: []
@@ -209,6 +215,8 @@ paths:
       responses:
         '204':
           description: No Content
+        '400':
+          description: Bad Request
       operationId: put-cart-userID
       security:
         - JWT: []
@@ -406,6 +414,10 @@ paths:
       responses:
         '201':
           description: Created
+        '400':
+          description: Bad Request
+        '409':
+          description: Conflict
       description: add new currency
       security:
         - JWT: []
@@ -432,6 +444,22 @@ paths:
       operationId: get-categories
       description: get a list of all categories
     parameters: []
+    post:
+      summary: ''
+      operationId: post-categories
+      responses:
+        '201':
+          description: Created
+      description: create new acuurency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+      security:
+        - JWT: []
+      tags:
+        - currency
   /orders:
     parameters: []
     get:
@@ -631,6 +659,46 @@ paths:
       security:
         - JWT: []
       description: get all product name and id
+  /currencies/allowed:
+    get:
+      summary: get all allowed currencies with details
+      tags:
+        - currency
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+        '403':
+          description: Forbidden
+      operationId: get-currencies-allowed
+      description: get all currencires with details for admin
+      security:
+        - JWT: []
+  /currencies/all:
+    get:
+      summary: get all currencies
+      tags:
+        - currency
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+        '403':
+          description: Forbidden
+      operationId: get-currencies-all
+      description: get all curencies for admin
+      security:
+        - JWT: []
 components:
   schemas:
     Product:

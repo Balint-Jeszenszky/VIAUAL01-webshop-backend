@@ -1,9 +1,10 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import Product from '../../../models/Product';
-import app from '../../../app';
+import Product from '../../models/Product';
+import app from '../../app';
 import request from 'supertest';
 
 describe('searchProducts middleware', () => {
@@ -23,6 +24,10 @@ describe('searchProducts middleware', () => {
         product3.description = 'ez is alma';
         product3.price = 44;
         await product3.save();
+    });
+
+    after(async () => {
+        await Product.deleteMany({});
     });
 
     it('should response with a JSON array of products with matching name or description', (done: Done) =>{

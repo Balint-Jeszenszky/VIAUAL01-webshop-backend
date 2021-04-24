@@ -17,7 +17,7 @@ export default function(objRepo: ObjectRepository) {
     const POSKey = process.env.BARION_POSKEY;
     const baseCurrency = process.env.DEFAULT_CURRENCY;
     const adminEmail = process.env.ADMIN_EMAIL;
-    if ((!baseUrl || !POSKey || !baseCurrency || !adminEmail) && process.env.NODE_ENV !== 'test') {
+    if (!baseUrl || !POSKey || !baseCurrency || !adminEmail) {
         throw new TypeError('WEBSITE_BASE_URL, BARION_POSKEY, DEFAULT_CURRENCY or ADMIN_EMAIL undefined');
     }
 

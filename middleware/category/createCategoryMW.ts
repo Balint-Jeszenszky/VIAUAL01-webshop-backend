@@ -31,7 +31,7 @@ export default function(objRepo: ObjectRepository) {
 
         try {
             await newCategory.save();
-            return res.sendStatus(201);
+            return res.status(201).json(newCategory);
         } catch (e) {
             return next(e);
         }

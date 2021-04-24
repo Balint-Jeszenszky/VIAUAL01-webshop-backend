@@ -1,9 +1,10 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import Product from '../../../models/Product';
-import app from '../../../app';
+import Product from '../../models/Product';
+import app from '../../app';
 import request from 'supertest';
 
 describe('getRecommendedProducts middleware', () => {
@@ -20,7 +21,11 @@ describe('getRecommendedProducts middleware', () => {
         product2.price = 44;
         product2.recommended = false;
         await product2.save();
-    })
+    });
+
+    after(async () => {
+        await Product.deleteMany({});
+    });
 
     it('should response with a JSON array of recommended products', (done: Done) =>{
         request(app).get('/api/products')

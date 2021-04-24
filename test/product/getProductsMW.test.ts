@@ -1,17 +1,18 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import Product from '../../../models/Product';
-import Category from '../../../models/Category';
-import app from '../../../app';
+import Product from '../../models/Product';
+import Category from '../../models/Category';
+import app from '../../app';
 import request from 'supertest';
 
 describe('getProducts middleware', () => {
     let id = '';
     before(async () => {
         const cat = new Category();
-        cat.name = 'cccc';
+        cat.name = 'cat';
         cat.productNumber = 5;
         await cat.save();
         id = cat._id;
@@ -26,6 +27,11 @@ describe('getProducts middleware', () => {
         product2.description = 'ewwwf';
         product2.price = 444;
         await product2.save();
+    });
+
+    after(async () => {
+        await Category.deleteMany({});
+        await Product.deleteMany({});
     });
 
     it('should response with a JSON array of products', (done: Done) => {

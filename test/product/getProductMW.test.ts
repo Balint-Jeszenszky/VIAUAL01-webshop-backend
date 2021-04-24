@@ -1,9 +1,10 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import Product from '../../../models/Product';
-import app from '../../../app';
+import Product from '../../models/Product';
+import app from '../../app';
 import request from 'supertest';
 
 describe('getProduct middleware', () => {
@@ -16,6 +17,10 @@ describe('getProduct middleware', () => {
         product.price = 222;
         await product.save();
         id = product._id;
+    });
+
+    after(async () => {
+        await Product.deleteMany({});
     });
 
     it('should response with a product', (done: Done) => {

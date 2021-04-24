@@ -10,7 +10,7 @@ import ObjectRepository from '../../models/ObjectRepository';
 export default function (objRepo: ObjectRepository) {
     const base = process.env.DEFAULT_CURRENCY;
     const apiKey = process.env.EXCHANGERATES_API_KEY;
-    if ((!base || !apiKey) && process.env.NODE_ENV !== 'test') {
+    if (!base || !apiKey) {
         throw new TypeError('currency base or exchange api key undefined');
     }
 

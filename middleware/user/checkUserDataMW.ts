@@ -11,8 +11,8 @@ import bcrypt from 'bcrypt';
 
 export default function(objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
-    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || 'test';
-    if (accessTokenSecret === 'test' && process.env.NODE_ENV !== 'test') {
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+    if (!accessTokenSecret) {
         throw new TypeError('HASH_SECRET not set in .env');
     }
 

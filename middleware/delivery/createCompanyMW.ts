@@ -6,13 +6,13 @@ import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
 import { Model } from 'mongoose';
-import { ICompany, toCompanyDTO } from '../../models/Company';
+import { ICompany } from '../../models/Company';
 import jwt from 'jsonwebtoken';
 
 export default function (objRepo: ObjectRepository) {
     const CompanyModel: Model<ICompany> = requireOption(objRepo, 'Company');
     const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-    if (!accessTokenSecret && process.env.NODE_ENV !== 'test') {
+    if (!accessTokenSecret) {
         throw new TypeError('ACCESS_TOKEN_SECRET undefined');
     }
 
@@ -29,7 +29,7 @@ export default function (objRepo: ObjectRepository) {
             await company.save();
             company.accessToken = jwt.sign({ name: company.name, id: company._id, random }, accessTokenSecret!);
             await company.save();
-            res.sendStatus(201);
+            res.status(201).json(company);
         } catch (e) {
             next(e);
         }

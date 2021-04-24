@@ -1,9 +1,10 @@
-process.env.NODE_ENV = 'test';
+import createTestEnv from '../createTestEnv';
+createTestEnv();
 
 import { expect } from 'chai';
 import { describe, it, before, Done } from 'mocha';
-import Category from '../../../models/Category';
-import app from '../../../app';
+import Category from '../../models/Category';
+import app from '../../app';
 import request from 'supertest';
 
 describe('getCategories middleware', () => {
@@ -17,6 +18,10 @@ describe('getCategories middleware', () => {
         cat2.productNumber = 72;
         await cat2.save();
     })
+
+    after(async () => {
+        await Category.deleteMany({});
+    });
 
     it('should response with a JSON array of all categories', (done: Done) => {
         request(app).get('/api/categories')

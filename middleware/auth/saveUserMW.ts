@@ -23,7 +23,7 @@ export default function(objRepo: ObjectRepository) {
 
         const newUser = new UserModel();
         newUser.name = req.body.name;
-        newUser.username = req.body.username;
+        newUser.username = req.body.username.toLowerCase();
         newUser.email = req.body.email;
         newUser.password = passwordHash;
         newUser.phoneNumber = '';

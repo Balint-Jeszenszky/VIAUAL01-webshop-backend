@@ -7,6 +7,8 @@ import path from 'path';
 import externalServices from './externalServices/externalServices';
 import createAdmin from './services/createAdmin';
 import dotenv from 'dotenv';
+import colors from 'colors';
+
 import cors from 'cors'; // remove in production code
 
 dotenv.config();
@@ -21,7 +23,7 @@ app.use(express.static('static'));
 app.use(express.json());
 
 if (process.env.NODE_ENV === 'DEVELOPMENT') { // remove in production code
-    app.use(cors()); // for separate client development
+    //app.use(cors()); // for separate client development
     //app.use((req, res, next) => setTimeout(next, 200)); // artificial latency
     //app.use(morgan('combined'));
 }
@@ -32,7 +34,7 @@ routes(app);
 
 app.use((err: express.ErrorRequestHandler, req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.status(500).end('Something went wrong...');
-    console.log(`Error: ${err}`);
+    console.log(colors.red(`Error: ${err}`));
 });
 
 export default app;

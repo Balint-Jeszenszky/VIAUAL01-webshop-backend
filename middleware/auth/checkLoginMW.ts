@@ -30,7 +30,7 @@ export default function(objRepo: ObjectRepository) {
         let user;
 
         try {
-            user = await UserModel.findOne({ username: req.body.username });
+            user = await UserModel.findOne({ username: req.body.username.toLowerCase() });
             if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
                 return res.sendStatus(403);
             }

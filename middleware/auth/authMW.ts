@@ -13,7 +13,7 @@ export default function(objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
     const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || 'test';
     if (accessTokenSecret === 'test' && process.env.NODE_ENV !== 'test') {
-        throw new TypeError('HASH_SECRET not set in .env');
+        throw new TypeError('ACCESS_TOKEN_SECRET not set in .env');
     }
 
     return async function (req: Request, res: Response, next: NextFunction) {

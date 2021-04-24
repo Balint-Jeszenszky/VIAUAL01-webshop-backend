@@ -23,7 +23,7 @@ export default function(objRepo: ObjectRepository) {
 
         const errors: string[] = [];
         try {
-            const username = await UserModel.findOne({ username: req.body.username });
+            const username = await UserModel.findOne({ username: req.body.username.toLowerCase() });
             if (username) {
                 errors.push('username');
             }

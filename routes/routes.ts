@@ -1,7 +1,5 @@
 import express from 'express';
 import cors, { CorsOptionsDelegate, CorsOptions } from 'cors';
-import multer from 'multer';
-import path from 'path';
 
 import adminAccessMW from '../middleware/auth/adminAccessMW';
 import authMW from '../middleware/auth/authMW';
@@ -36,12 +34,15 @@ import getCompaniesMW from '../middleware/delivery/getCompaniesMW'
 import updateDeliveryMW from '../middleware/delivery/updateDeliveryMW'
 
 import checkCustomerDetailsMW from '../middleware/order/checkCustomerDetailsMW';
+import createOrderMW from '../middleware/order/createOrderMW';
 import getOrderMW from '../middleware/order/getOrderMW';
 import getOrdersMW from '../middleware/order/getOrdersMW';
 import startOrderMW from '../middleware/order/startOrderMW';
 import updateOrderMW from '../middleware/order/updateOrderMW';
 
 import barionStartPaymentMW from '../middleware/payment/barionStartPaymentMW';
+import barionIPfilterMW from '../middleware/payment/barionIPfilterMW';
+import barionIPs from '../middleware/payment/barionIPs';
 import barionFinnishPaymentMW from '../middleware/payment/barionFinnishPaymentMW';
 
 import deleteProductMW from '../middleware/product/deleteProductMW';
@@ -61,6 +62,8 @@ import deleteUserMW from '../middleware/user/deleteUserMW';
 import getUserMW from '../middleware/user/getUserMW';
 import updateUserMW from '../middleware/user/updateUserMW';
 
+import upload from '../services/uploadImage';
+
 import ObjectRepository from '../models/ObjectRepository';
 import Product from '../models/Product';
 import Category from '../models/Category';
@@ -69,44 +72,8 @@ import Order from '../models/Order';
 import Currency from '../models/Currency';
 import Company from '../models/Company';
 import Transaction from '../models/Transaction';
-import createOrderMW from '../middleware/order/createOrderMW';
 
 export default function(app: express.Application) {
-    const storage = multer.diskStorage({
-        destination: 'static/images',
-        filename: (req, file, cb) => {
-            const name = file.originalname;
-            const ext = path.extname(name);
-            cb(null, `${name.substr(0, name.length - 4).split(' ').join('_')}_${Date.now()}_${Math.random().toString(36).substring(2,6)}${ext}`);
-        }
-    });
-
-    const upload = multer({
-        storage,
-        limits: {
-            fileSize: 1024*1024
-        },
-        fileFilter: (req, file, cb) => {
-            const name = file.originalname;
-            const ext = path.extname(name);
-            const fileTypes = /jpeg|jpg|png|gif/;
-            const valid = fileTypes.test(ext.toLowerCase()) && fileTypes.test(file.mimetype);
-            cb(null, valid);
-        }
-    }).single('productImage');
-
-    const barionIPs = [
-        '13.79.241.141',
-        '::ffff:13.79.241.141',
-        '40.69.88.149',
-        '::ffff:40.69.88.149',
-        '40.69.88.240',
-        '::ffff:40.69.88.240',
-        '52.164.220.205',
-        '::ffff:52.164.220.205',
-        '52.169.80.55',
-        '::ffff:52.169.80.55'
-    ];
 
     const barionCorsOptions: CorsOptionsDelegate = (req, callback) => {
         const corsOptions: CorsOptions = {
@@ -389,6 +356,7 @@ export default function(app: express.Application) {
     app.post(
         '/api/barion',
         cors(barionCorsOptions),
+        barionIPfilterMW,
         barionFinnishPaymentMW(objRepo),
         createOrderMW(objRepo)
     );

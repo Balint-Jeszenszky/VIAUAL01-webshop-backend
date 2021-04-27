@@ -25,6 +25,7 @@ export default function (objRepo: ObjectRepository) {
             order.paid = false;
             order.customer = res.locals.customer;
             order.customer.userId = user._id;
+            order.currency = req.body.currency;
             await order.save();
 
             res.locals.order = order;

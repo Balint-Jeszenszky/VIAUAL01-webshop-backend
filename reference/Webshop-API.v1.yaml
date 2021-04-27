@@ -770,6 +770,33 @@ components:
             $ref: '#/components/schemas/OrderProduct'
         date:
           type: string
+        paid:
+          type: boolean
+        customer:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            address:
+              type: string
+            userId:
+              type: string
+            phoneNumber:
+              type: string
+        mapsAPI:
+          type: object
+          properties:
+            APIKey:
+              type: string
+            coords:
+              type: object
+              properties:
+                lng:
+                  type: number
+                alt:
+                  type: number
     Currency:
       title: Currency
       type: object

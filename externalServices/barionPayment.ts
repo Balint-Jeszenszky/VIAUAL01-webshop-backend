@@ -9,10 +9,12 @@ import { Model } from 'mongoose';
 import requireOption from '../middleware/generic/requireOption';
 import axios from 'axios';
 import ObjectRepository from '../models/ObjectRepository';
+import { ICurrency } from '../models/Currency';
 
 export default function(objRepo: ObjectRepository) {
     const ProductModel: Model<IProduct> = requireOption(objRepo, 'Product');
     const TransactionModel: Model<ITransaction> = requireOption(objRepo, 'Transaction');
+    const CurrencyModel: Model<ICurrency> = requireOption(objRepo, 'Currency');
     const baseUrl = process.env.WEBSITE_BASE_URL;
     const POSKey = process.env.BARION_POSKEY;
     const baseCurrency = process.env.DEFAULT_CURRENCY;
@@ -22,13 +24,43 @@ export default function(objRepo: ObjectRepository) {
     }
 
     const startPayment = async (order: IOrder) => {
+
+        let currency = order.currency;
+        let locale: string;
+
+        const currencies = ['EUR', 'HUF', 'USD', 'CZK'];
+        const locales = ['en-US', 'hu-HU', 'en-US', 'cs-CZ'];
+
+        let idx = currencies.findIndex(c => c === currency);
+
+        if (idx === -1) {
+            currency = baseCurrency;
+            if (currencies.findIndex(c => c === currency)) {
+                currency = currencies[0];
+                idx = 0;
+            }
+        }
+
+        order.currency = currency;
+        await order.save();
+
+        locale = locales[idx];
+
+        let multiplyer = 1;
+        if (currency !== baseCurrency) {
+            const currencyData = await CurrencyModel.findOne({name: currency});
+            if (currencyData) {
+                multiplyer *= currencyData.price * (1 + currencyData.charge);
+            }
+        }
+        
         let total = 0;
         const items = [];
 
         for (const item of order.products) {
             const product = await ProductModel.findById(item.id);
-            if (!product) throw new TypeError("Cant find product");
-            const itemPrice = item.amount * product.price;
+            if (!product) throw new TypeError('Cant find product');
+            const itemPrice = parseFloat((item.amount * product.price * multiplyer).toFixed(2));
             total += itemPrice;
             items.push({
                 Name: product.name,
@@ -43,11 +75,11 @@ export default function(objRepo: ObjectRepository) {
 
         const transactionData = {
             POSKey: POSKey,
-            PaymentType: "Immediate",
+            PaymentType: 'Immediate',
             GuestCheckOut: true,
-            FundingSources: ["All"],
+            FundingSources: ['All'],
             PaymentRequestId: `WEBSHOP-${order._id}-${Date.now()}`,
-            RedirectUrl: `${baseUrl}/#/order/${order._id}`,
+            RedirectUrl: `${baseUrl}/order/${order._id}`,
             CallbackUrl: `${baseUrl}/api/barion`,
             Transactions: [{
                 POSTransactionId: `WEBSHOP-${order._id}-${Date.now()}/TR001`,
@@ -55,8 +87,8 @@ export default function(objRepo: ObjectRepository) {
                 Total: total,
                 Items: items
             }],
-            Locale: "hu-HU",
-            Currency: baseCurrency
+            Locale: locale,
+            Currency: currency
         }
 
         const responseData = await axios.post('https://api.test.barion.com/v2/Payment/Start', transactionData);

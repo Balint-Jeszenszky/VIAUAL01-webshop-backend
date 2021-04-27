@@ -12,7 +12,8 @@ export default function (objRepo: ObjectRepository) {
             req.body.name === undefined ||
             req.body.email === undefined ||
             req.body.address === undefined ||
-            req.body.phoneNumber === undefined
+            req.body.phoneNumber === undefined ||
+            req.body.currency === undefined
         ) {
             return res.sendStatus(400);
         }

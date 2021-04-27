@@ -24,6 +24,7 @@ export interface IOrder extends Document {
     products: ListItem[],
     paid: boolean,
     customer: Customer,
+    currency: string,
     mapsAPI: MapsAPI | undefined
 }
 
@@ -36,6 +37,7 @@ export function toOrderDTO(order: IOrder) {
         id: order._id,
         date: order.date,
         products: order.products,
+        currency: order.currency,
         mapsAPI
     };
 }
@@ -45,6 +47,7 @@ const OrderSchema: Schema = new Schema({
     products: { type: Array, required: true },
     paid: { type: Boolean, required: true },
     customer: { type: Object, required: true },
+    currency: { type: String, required: true },
     mapsAPI: { type: Object }
 });
 

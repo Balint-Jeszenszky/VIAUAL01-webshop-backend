@@ -41,6 +41,7 @@ describe('getOrders middleware', () => {
         order.products = [{id: product._id, amount: 3}];
         order.customer = {name: 'asd', email: 'asd', address: 'asd', phoneNumber: '321', userId: user._id};
         order.paid = true;
+        order.currency = 'HUF';
         await order.save();
 
         adminToken = jwt.sign({userId: admin._id}, process.env.ACCESS_TOKEN_SECRET!);

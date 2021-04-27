@@ -31,6 +31,7 @@ describe('get Order', () => {
         order.date = new Date();
         order.products = [{id: product._id, amount: 3}];
         order.paid = true;
+        order.currency = 'HUF';
         order.customer = {
             name: 'asd',
             address: 'asd',

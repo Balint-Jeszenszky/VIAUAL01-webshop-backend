@@ -6,7 +6,7 @@ import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
 import { Model } from 'mongoose';
-import { ICategory } from '../../models/Category';
+import { ICategory, toCategoryDTO } from '../../models/Category';
 
 export default function(objRepo: ObjectRepository) {
     const CategoryModel: Model<ICategory> = requireOption(objRepo, 'Category');
@@ -31,7 +31,7 @@ export default function(objRepo: ObjectRepository) {
 
         try {
             await newCategory.save();
-            return res.status(201).json(newCategory);
+            return res.status(201).json(toCategoryDTO(newCategory));
         } catch (e) {
             return next(e);
         }

@@ -23,7 +23,7 @@ app.use(express.static('static'));
 app.use(express.json());
 
 if (process.env.NODE_ENV === 'DEVELOPMENT') { // remove in production code
-    app.use(cors()); // for separate client development
+    //app.use(cors()); // for separate client development
     //app.use((req, res, next) => setTimeout(next, 200)); // artificial latency
     //app.use(morgan('combined'));
 }
@@ -36,5 +36,7 @@ app.use((err: express.ErrorRequestHandler, req: express.Request, res: express.Re
     res.status(500).end('Something went wrong...');
     console.log(colors.red(`Error: ${err}`));
 });
+
+app.use('/*', (req, res, next) => res.sendFile(path.join(__dirname, './static/index.html')));
 
 export default app;

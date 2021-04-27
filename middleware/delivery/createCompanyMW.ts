@@ -6,7 +6,7 @@ import { Request, Response, NextFunction } from 'express';
 import requireOption from '../generic/requireOption';
 import ObjectRepository from '../../models/ObjectRepository';
 import { Model } from 'mongoose';
-import { ICompany } from '../../models/Company';
+import { ICompany, toCompanyDTO } from '../../models/Company';
 import jwt from 'jsonwebtoken';
 
 export default function (objRepo: ObjectRepository) {
@@ -29,7 +29,7 @@ export default function (objRepo: ObjectRepository) {
             await company.save();
             company.accessToken = jwt.sign({ name: company.name, id: company._id, random }, accessTokenSecret!);
             await company.save();
-            res.status(201).json(company);
+            res.status(201).json(toCompanyDTO(company));
         } catch (e) {
             next(e);
         }

@@ -7,7 +7,7 @@ import Product from '../../models/Product';
 import app from '../../app';
 import request from 'supertest';
 
-describe('searchProducts middleware', () => {
+describe('search Products', () => {
     before(async () => {
         const product1 = new Product();
         product1.name='alma fa';

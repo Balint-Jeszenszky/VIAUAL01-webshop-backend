@@ -8,7 +8,7 @@ import app from '../../app';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 
-describe('getUser middleware', () => {
+describe('get User', () => {
     let id = '';
     let token = '';
 
@@ -20,7 +20,7 @@ describe('getUser middleware', () => {
         user.password = 'pass';
         await user.save();
         id = user._id;
-        token = jwt.sign({userId: id}, process.env.ACCESS_TOKEN_SECRET || 'test');
+        token = jwt.sign({userId: id}, process.env.ACCESS_TOKEN_SECRET!);
     });
 
     after(async () => {

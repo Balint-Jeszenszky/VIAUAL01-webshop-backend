@@ -7,7 +7,7 @@ import Product from '../../models/Product';
 import app from '../../app';
 import request from 'supertest';
 
-describe('getProduct middleware', () => {
+describe('get Product', () => {
     let id = '';
 
     before(async () => {

@@ -13,6 +13,10 @@ export default function(objRepo: ObjectRepository) {
     const UserModel: Model<IUser> = requireOption(objRepo, 'User');
 
     return async function (req: Request, res: Response, next: NextFunction) {
+        if (res.locals.userId !== req.params.userId) {
+            return res.sendStatus(403);
+        }
+
         try {
             const user = await UserModel.findByIdAndDelete(req.params.userId);
             if (user) {

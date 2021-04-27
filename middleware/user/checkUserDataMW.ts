@@ -17,9 +17,7 @@ export default function(objRepo: ObjectRepository) {
     }
 
     return async function (req: Request, res: Response, next: NextFunction) {
-        if (req.body === undefined ||
-            req.params.userrID !== req.body.userId ||
-            req.params.userrID ||
+        if (req.params.userId !== req.body.userId ||
             req.body.name === undefined ||
             req.body.email === undefined
         ) {
@@ -62,26 +60,29 @@ export default function(objRepo: ObjectRepository) {
                     errors.push('pass_short');
                 }
 
-                let oldPassword;
+                let passMatch;
                 try {
-                    oldPassword = await bcrypt.hash(req.body.password, 10);
+                    passMatch = await bcrypt.compare(req.body.oldPassword, user.password);
                 } catch (e) {
                     return next(e);
                 }
 
-                if (oldPassword !== user.password) {
+                if (!passMatch) {
                     errors.push('wrong_pass');
                 }
 
                 if (req.body.newPassword !== req.body.confirmPassword) {
                     errors.push('pass_not_match');
                 }
-                res.locals.password = await bcrypt.hash(req.body.password, 10);
+
+                if (!errors.length) {
+                    res.locals.password = await bcrypt.hash(req.body.newPassword, 10);
+                }
             }
         }
 
         if (errors.length) {
-            return res.status(409).json({errors})
+            return res.status(400).json({errors})
         }
 
         res.locals.user = user;

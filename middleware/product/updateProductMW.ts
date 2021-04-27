@@ -61,6 +61,7 @@ export default function(objRepo: ObjectRepository) {
                 product.categoryID = req.body.categoryID;
                 product.price = req.body.price;
                 product.stock = req.body.stock;
+                product.recommended = req.body.recommended;
                 await product.save();
                 return res.sendStatus(204);
             }

@@ -7,7 +7,7 @@ import Product from '../../models/Product';
 import app from '../../app';
 import request from 'supertest';
 
-describe('getRecommendedProducts middleware', () => {
+describe('get Recommended Products', () => {
     before(async () => {
         const product1 = new Product();
         product1.name='asd';

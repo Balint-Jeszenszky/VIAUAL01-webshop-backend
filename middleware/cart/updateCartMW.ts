@@ -34,7 +34,7 @@ export default function(objRepo: ObjectRepository) {
                 return res.sendStatus(400);
             }
             user.cart = cart;
-            user.save();
+            await user.save();
             return res.sendStatus(204);
         } catch (e) {
             return next(e);

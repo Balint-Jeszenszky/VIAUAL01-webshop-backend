@@ -8,7 +8,7 @@ import Category from '../../models/Category';
 import app from '../../app';
 import request from 'supertest';
 
-describe('getProducts middleware', () => {
+describe('get Products', () => {
     let id = '';
     before(async () => {
         const cat = new Category();

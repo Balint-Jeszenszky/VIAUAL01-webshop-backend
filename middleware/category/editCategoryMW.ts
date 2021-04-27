@@ -16,7 +16,6 @@ export default function (objRepo: ObjectRepository) {
         if (req.params.categoryId === undefined || 
             req.body.id === undefined ||
             req.body.name === undefined ||
-            req.body.productNumber === undefined ||
             req.params.categoryId !== req.body.id
         ) {
             return res.sendStatus(400);
@@ -26,7 +25,6 @@ export default function (objRepo: ObjectRepository) {
             const category = await CategoryModel.findById(req.params.categoryId);
             if (category) {
                 category.name = req.body.name;
-                category.productNumber = req.body.productNumber;
                 await category.save();
                 return res.sendStatus(204);
             }

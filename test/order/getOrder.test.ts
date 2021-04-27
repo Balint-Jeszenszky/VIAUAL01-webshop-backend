@@ -10,7 +10,7 @@ import Product from '../../models/Product';
 import User from '../../models/User';
 import jwt from 'jsonwebtoken';
 
-describe('getOrder middleware', () => {
+describe('get Order', () => {
     let id = '';
     let token = '';
 
@@ -40,7 +40,7 @@ describe('getOrder middleware', () => {
         }
         await order.save();
         id = order._id;
-        token = jwt.sign({userId: user._id}, process.env.ACCESS_TOKEN_SECRET || 'test');
+        token = jwt.sign({userId: user._id}, process.env.ACCESS_TOKEN_SECRET!);
     });
 
     after(async () => {

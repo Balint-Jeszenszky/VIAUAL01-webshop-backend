@@ -7,7 +7,7 @@ import Category from '../../models/Category';
 import app from '../../app';
 import request from 'supertest';
 
-describe('getCategories middleware', () => {
+describe('get Categories', () => {
     before(async () => {
         const cat1 = new Category();
         cat1.name='asd';

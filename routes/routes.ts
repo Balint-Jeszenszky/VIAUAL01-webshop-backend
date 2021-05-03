@@ -54,8 +54,9 @@ import saveProductMW from '../middleware/product/saveProductMW';
 import searchProductsMW from '../middleware/product/searchProductsMW';
 import updateProductMW from '../middleware/product/updateProductMW';
 
-import pushNotificationMW from '../middleware/pushNotifications/pushNotificationMW'
-import subscribeMW from '../middleware/pushNotifications/subscribeMW'
+import getVapidPublicKeyMW from '../middleware/pushNotifications/getVapidPublicKeyMW';
+import pushNotificationMW from '../middleware/pushNotifications/pushNotificationMW';
+import subscribeMW from '../middleware/pushNotifications/subscribeMW';
 
 import checkUserDataMW from '../middleware/user/checkUserDataMW';
 import deleteUserMW from '../middleware/user/deleteUserMW';
@@ -345,6 +346,11 @@ export default function(app: express.Application) {
         '/api/products/search/:query/page/:page',
         getCurrenciesMW(objRepo),
         searchProductsMW(objRepo)
+    );
+
+    app.get(
+        '/api/subscribe',
+        getVapidPublicKeyMW(objRepo)
     );
 
     app.post(

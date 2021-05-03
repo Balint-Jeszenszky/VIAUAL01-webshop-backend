@@ -9,8 +9,6 @@ import createAdmin from './services/createAdmin';
 import dotenv from 'dotenv';
 import colors from 'colors';
 
-import cors from 'cors'; // remove in production code
-
 dotenv.config();
 
 const app = express();
@@ -21,12 +19,6 @@ app.use(morgan('combined', { stream: accessLogStream }));
 //app.use(helmet());
 app.use(express.static('static'));
 app.use(express.json());
-
-if (process.env.NODE_ENV === 'DEVELOPMENT') { // remove in production code
-    //app.use(cors()); // for separate client development
-    //app.use((req, res, next) => setTimeout(next, 200)); // artificial latency
-    //app.use(morgan('combined'));
-}
 
 externalServices();
 createAdmin();

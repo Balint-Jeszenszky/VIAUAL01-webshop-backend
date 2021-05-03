@@ -311,6 +311,22 @@ paths:
                 userID:
                   type: string
       description: User subscription for push notifications
+    get:
+      summary: ''
+      operationId: get-subscribe
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  publicVapidKey:
+                    type: string
+      tags:
+        - notifications
+      description: gte public vapid key for notification subscription
   /delivery:
     put:
       summary: Delivery informationupdate

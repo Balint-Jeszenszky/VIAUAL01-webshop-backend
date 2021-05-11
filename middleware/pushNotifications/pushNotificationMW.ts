@@ -42,7 +42,9 @@ export default function (objRepo: ObjectRepository) {
 
                 const payload = JSON.stringify({ title: 'Delivery update', body: 'Your order is under delivery\nYou can see it in your orders' });
 
-                await webPush.sendNotification(user!.pushSubscription!, payload);
+                if (user?.pushSubscription) {
+                    await webPush.sendNotification(user.pushSubscription, payload);
+                }
             }
 
             return res.sendStatus(204);

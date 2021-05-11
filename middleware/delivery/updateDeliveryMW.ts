@@ -32,7 +32,7 @@ export default function(objRepo: ObjectRepository) {
             }
             const order = await OrderModel.findById(req.body.orderId);
             if (!order || !order.mapsAPI) {
-                return res.sendStatus(400);
+                return res.sendStatus(404);
             }
             order.mapsAPI.coords = req.body.coords;
             order.markModified('mapsAPI');

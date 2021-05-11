@@ -21,9 +21,8 @@ export default function(objRepo: ObjectRepository) {
             const user = await UserModel.findByIdAndDelete(req.params.userId);
             if (user) {
                 return res.sendStatus(204);
-            } else {
-                return res.sendStatus(400);
             }
+            return res.sendStatus(404);
         } catch (e) {
             return next(e);
         }

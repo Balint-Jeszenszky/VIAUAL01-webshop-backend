@@ -22,7 +22,7 @@ export default function(objRepo: ObjectRepository) {
                 }
                 return next();
             }
-            return res.sendStatus(400);
+            return res.sendStatus(404);
         } catch (e) {
             return next(e);
         }

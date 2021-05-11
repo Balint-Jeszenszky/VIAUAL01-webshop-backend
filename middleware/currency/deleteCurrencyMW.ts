@@ -18,7 +18,7 @@ export default function (objRepo: ObjectRepository) {
         }
 
         if (!res.locals.currencies.find((e: ICurrency) => e.id === req.params.currencyId)) {
-            return res.sendStatus(400);
+            return res.sendStatus(404);
         }
 
         try {

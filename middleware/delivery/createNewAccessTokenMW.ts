@@ -24,7 +24,7 @@ export default function (objRepo: ObjectRepository) {
         try {
             const company = await CompanyModel.findById(req.params.companyId);
             if (!company) {
-                return res.sendStatus(400);
+                return res.sendStatus(404);
             }
 
             const random = Math.random().toString(36).substring(2,10);

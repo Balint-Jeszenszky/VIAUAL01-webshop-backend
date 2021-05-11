@@ -22,7 +22,7 @@ export default function(objRepo: ObjectRepository) {
         try {
             const currency = await CurrencyModel.findById(req.params.currencyId);
             if (!currency || currency.name !== req.body.name) {
-                return res.sendStatus(400);
+                return res.sendStatus(404);
             }
             currency.charge = req.body.charge;
             await currency.save();
